@@ -25,7 +25,7 @@ import {
   limit,
 } from "firebase/firestore"
 
-import { firebaseConfig as localConfig } from "./firebase-config" // ensure you copy example to actual file
+import { firebaseConfig as localConfig } from './firebase-config'
 
 let app
 export function getFirebaseApp() {

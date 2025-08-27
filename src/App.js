@@ -5,7 +5,7 @@ import { Button } from "./components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs"
 import { Separator } from "./components/ui/separator"
-import { Download, FileUp, FileDown, Trash2, Printer, RefreshCcw, Maximize2, Save, List } from "lucide-react"
+import { Download, FileDown, Printer, List, Palette, Target } from "lucide-react"
 import CVForm from "./components/CVForm"
 import CVPreview from "./components/CVPreview"
 import TemplateSelector from "./components/TemplateSelector"
@@ -17,8 +17,10 @@ import AuthScreen from "./components/auth-screen"
 import UserMenu from "./components/user-menu"
 import CVManager from "./components/cv-manager"
 import { useAuth } from "./hooks/use-auth"
-import { createResume, updateResume } from "./firebase"
 import LandingPage from "./components/landing-page"
+import CustomizationPanel from "./components/customization-panel"
+import ExportPDF from "./components/ExportPDF"
+import ResumeScorer from "./components/resume-scorer"
 import { LOGO_PATH } from "./constants"
 
 const LOCAL_KEY = "cv_builder_form_v3"
@@ -46,6 +48,21 @@ export default function App() {
   const [showManager, setShowManager] = useState(false)
   const [currentResumeId, setCurrentResumeId] = useState(null)
 
+  const handleTemplateChange = (newTemplate) => {
+    setTemplate(newTemplate)
+  }
+  const [showCustomizer, setShowCustomizer] = useState(false)
+  const [showExport, setShowExport] = useState(false)
+  const [showScorer, setShowScorer] = useState(false)
+  const [customizations, setCustomizations] = useState({
+    fontFamily: 'Inter',
+    fontSize: 'medium',
+    spacing: 'normal',
+    primaryColor: '#3b82f6',
+    accentColor: '#fbbf24',
+    borderRadius: 'medium'
+  })
+
   // Load persisted data
   useEffect(() => {
     try {
@@ -71,6 +88,7 @@ export default function App() {
       localStorage.setItem(TEMPLATE_KEY, template)
     } catch {}
   }, [template])
+
 
   const isValid = useMemo(() => {
     const hasName = (formData.name || "").trim().length > 0
@@ -111,47 +129,6 @@ export default function App() {
 
   const onPrint = () => printOnlyCV()
 
-  const onQuickSeed = () => {
-    setFormData({
-      ...defaultForm,
-      name: "Alex Johnson",
-      email: "alex.johnson@example.com",
-      phone: "+1 (555) 123-4567",
-      summary:
-        "Full-stack developer with 5+ years experience building scalable web apps with React, Node.js, and cloud-native services.",
-      education: [
-        {
-          level: "Bachelor's in Computer Science",
-          organization: "State University",
-          startDate: "2016",
-          endDate: "2020",
-        },
-      ],
-      experiences: [
-        {
-          title: "Senior Frontend Engineer",
-          company: "Acme Corp",
-          duration: "2023 - Present",
-          description: "Led migration to modern tooling, implemented design system, and improved performance.",
-        },
-        {
-          title: "Frontend Engineer",
-          company: "Globex",
-          duration: "2020 - 2023",
-          description: "Built dashboards, optimized bundle size, and improved accessibility.",
-        },
-      ],
-      projects: [
-        {
-          name: "Realtime Collab Docs",
-          description: "Google-docs like editing with CRDTs.",
-          link: "https://github.com/example/collab",
-        },
-      ],
-      skills: "React, Next.js, Node.js, Tailwind CSS, PostgreSQL, Docker",
-      hobbies: "Hiking, Photography, Chess",
-    })
-  }
 
   const onExportJSON = () => {
     try {
@@ -168,45 +145,48 @@ export default function App() {
     }
   }
 
-  const onImportJSON = async (file) => {
-    if (!file) return
-    try {
-      const text = await file.text()
-      const data = JSON.parse(text)
-      setFormData({ ...defaultForm, ...data })
-      toast({ title: "Imported", description: "Your data was imported successfully." })
-    } catch {
-      toast({ title: "Import failed", description: "Please select a valid JSON file." })
-    }
-  }
-
-  const onClearAll = () => {
-    setFormData(defaultForm)
-    toast({ title: "Cleared", description: "All fields were reset." })
-  }
-
-  // Cloud save helpers (requires auth)
-  const saveToCloud = async () => {
-    if (!user) {
-      setShowManager(true)
-      return
-    }
-    if (currentResumeId) {
-      await updateResume(currentResumeId, { data: formData, template })
-      toast({ title: "Saved", description: "Resume updated in your account." })
-    } else {
-      const name = prompt("Name for this resume?")
-      if (!name) return
-      const id = await createResume(user.uid, { name, data: formData, template })
-      setCurrentResumeId(id)
-      toast({ title: "Saved", description: "Resume created in your account." })
-    }
-  }
 
   if (loading) {
     return (
-      <div className="min-h-[50vh] grid place-items-center">
-        <div className="text-sm text-muted-foreground">Loading…</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-6 animate-in-fade">
+          {/* Logo and Brand */}
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-pulse">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div className="space-y-1">
+              <div className="h-6 w-32 bg-muted rounded animate-pulse"></div>
+              <div className="h-4 w-24 bg-muted/60 rounded animate-pulse"></div>
+            </div>
+          </div>
+
+          {/* Loading Animation */}
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
+            <div className="absolute inset-0 w-16 h-16 border-4 border-accent/20 border-t-accent rounded-full animate-spin mx-auto animation-delay-300"></div>
+          </div>
+
+          {/* Loading Text */}
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-foreground">Loading SwiftCV Builder</h2>
+            <p className="text-muted-foreground animate-pulse">Preparing your workspace...</p>
+          </div>
+
+          {/* Skeleton Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mt-8">
+            <div className="space-y-3">
+              <div className="h-4 w-24 bg-muted rounded animate-pulse"></div>
+              <div className="h-32 bg-muted/50 rounded-lg animate-pulse"></div>
+            </div>
+            <div className="space-y-3">
+              <div className="h-4 w-32 bg-muted rounded animate-pulse"></div>
+              <div className="h-32 bg-muted/50 rounded-lg animate-pulse"></div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -217,95 +197,121 @@ export default function App() {
   }
 
   return (
-    <div className="page-shell">
+    <div className="page-shell keyboard-navigation">
+      {/* Skip link for accessibility */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       <Toaster />
       <CursorLight />
 
-      {/* Brand hero */}
-      <section className="brand-hero">
-        <div className="brand-hero__bg">
-          <div className="shape shape--pill float-a" />
-          <div className="shape shape--blob float-b" />
-          <div className="shape shape--ring float-c" />
-        </div>
-
-        <div className="brand-hero__content">
-          <div className="brand-hero__title">
-            <span className="badge">New</span>
-            <h1 className="title">
-              CV Builder <span className="title-accent">Pro</span>
-            </h1>
-            <p className="subtitle">
-              Design a standout resume with live preview, templates, save-to-cloud, and one-click PDF.
-            </p>
+      {/* Modern Header */}
+      <header className="app-header">
+        <div className="header-container">
+          <div className="header-brand">
+            <img src={LOGO_PATH} alt="SwiftCV Logo" className="header-logo" />
+            <span className="header-title hidden sm:inline">SwiftCV Builder</span>
+            <span className="header-title sm:hidden">SwiftCV</span>
           </div>
 
-          <div className="brand-hero__controls">
-            <TemplateSelector template={template} setTemplate={setTemplate} />
-            <div className="brand-hero__right">
+          <div className="header-actions">
+            {/* Desktop Layout */}
+            <div className="hidden md:flex header-stats">
+              <div className="stat-badge">
+                <span className="stat-label hidden lg:inline">Template:</span>
+                <TemplateSelector template={template} setTemplate={handleTemplateChange} />
+              </div>
+              <div className={`status-indicator ${isValid ? 'valid' : 'invalid'}`}>
+                <div className="status-dot"></div>
+                <span className="hidden sm:inline">{isValid ? 'Ready' : 'Incomplete'}</span>
+                <span className="sm:hidden">{isValid ? '✓' : '!'}</span>
+              </div>
+            </div>
+
+            <div className="header-buttons">
+              {/* Desktop Buttons */}
+              <div className="hidden sm:flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCustomizer(true)}
+                  className="header-btn"
+                  size="sm"
+                >
+                  <Palette className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
+                  <span className="hidden lg:inline">Customize</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={() => setShowScorer(true)}
+                  className="header-btn"
+                  size="sm"
+                >
+                  <Target className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
+                  <span className="hidden lg:inline">Score CV</span>
+                </Button>
+
+                <Button
+                  onClick={() => setShowExport(true)}
+                  disabled={!isValid}
+                  className="header-btn primary"
+                  size="sm"
+                >
+                  <Download className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
+                  <span className="hidden lg:inline">Export</span>
+                </Button>
+              </div>
+
+              {/* Mobile Template Selector */}
+              <div className="md:hidden">
+                <TemplateSelector template={template} setTemplate={handleTemplateChange} />
+              </div>
+
               {user ? (
                 <UserMenu user={user} onOpenManager={() => setShowManager(true)} />
               ) : (
-                <Button variant="outline" onClick={() => setShowManager(true)}>
-                  <List className="h-4 w-4 mr-2" />
-                  Sign in / Manage CVs
+                <Button variant="outline" onClick={() => setShowManager(true)} className="header-btn" size="sm">
+                  <List className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
+                  <span className="hidden sm:inline">Sign in</span>
                 </Button>
               )}
+
               <ModeToggle />
             </div>
           </div>
-
-          <div className="brand-hero__actions">
-            <Button variant="secondary" onClick={onQuickSeed}>
-              <RefreshCcw className="mr-2 h-4 w-4" />
-              Quick sample
-            </Button>
-
-            <input
-              id="import-json"
-              type="file"
-              accept="application/json"
-              onChange={(e) => onImportJSON(e.target.files?.[0])}
-              className="hidden"
-            />
-            <Button variant="outline" asChild className="bg-transparent">
-              <label htmlFor="import-json" className="cursor-pointer inline-flex items-center">
-                <FileUp className="mr-2 h-4 w-4" />
-                Import JSON
-              </label>
-            </Button>
-
-            <Button variant="outline" onClick={onExportJSON} className="bg-transparent">
-              <FileDown className="mr-2 h-4 w-4" />
-              Export JSON
-            </Button>
-
-            <Button variant="outline" onClick={onPrint} className="bg-transparent">
-              <Printer className="mr-2 h-4 w-4" />
-              Print / PDF
-            </Button>
-
-            <Button onClick={() => setShowFullscreen(true)}>
-              <Maximize2 className="mr-2 h-4 w-4" />
-              Full screen
-            </Button>
-
-            <Button variant="destructive" onClick={onClearAll}>
-              <Trash2 className="mr-2 h-4 w-4" />
-              Clear all
-            </Button>
-
-            <Button onClick={saveToCloud}>
-              <Save className="mr-2 h-4 w-4" />
-              Save to Cloud
-            </Button>
-            <Button variant="outline" onClick={() => setShowManager(true)}>
-              <List className="mr-2 h-4 w-4" />
-              My CVs
-            </Button>
-          </div>
         </div>
-      </section>
+
+        {/* Mobile Action Bar */}
+        <div className="sm:hidden mobile-action-bar">
+          <Button
+            variant="outline"
+            onClick={() => setShowCustomizer(true)}
+            className="mobile-action-btn"
+            size="sm"
+          >
+            <Palette className="h-4 w-4" />
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => setShowScorer(true)}
+            className="mobile-action-btn"
+            size="sm"
+          >
+            <Target className="h-4 w-4" />
+          </Button>
+
+          <Button
+            onClick={() => setShowExport(true)}
+            disabled={!isValid}
+            className="mobile-action-btn primary"
+            size="sm"
+          >
+            <Download className="h-4 w-4" />
+          </Button>
+        </div>
+      </header>
 
       {/* If not signed in and manager requested, show auth UI inside manager overlay */}
       {!user && showManager ? (
@@ -339,73 +345,198 @@ export default function App() {
       ) : null}
 
       {/* Main content */}
-      <div className="container space-y-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-in">
-          <Card className="print:hidden elevated hover-raise">
+      <main id="main-content" className="container space-y-4 md:space-y-6 animate-in-fade">
+        {/* Mobile: Preview First, Form Second */}
+        <div className="block md:hidden space-y-4">
+          {/* Mobile Preview */}
+          <Card className="overflow-hidden elevated hover-raise animate-in-up">
             <CardHeader className="pb-3">
-              <CardTitle>Details</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                  Preview
+                </CardTitle>
+                <div className="flex items-center gap-1" role="status" aria-live="polite">
+                  {isValid ? (
+                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      Ready
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
+                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-500"></div>
+                      Incomplete
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-3">
+              <div id="preview" className="preview-surface glow-surface rounded-lg overflow-hidden relative">
+                <div className="animate-in-scale scale-90 origin-top">
+                  <CVPreview formData={formData} template={template} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Mobile Form */}
+          <Card className="print:hidden elevated hover-raise animate-in-up animate-delay-100">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <svg className="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                Edit Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3">
+              <Tabs defaultValue="profile" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-3 h-auto">
+                  <TabsTrigger value="profile" className="text-xs py-2">Profile</TabsTrigger>
+                  <TabsTrigger value="education" className="text-xs py-2">Education</TabsTrigger>
+                  <TabsTrigger value="experience" className="text-xs py-2">Experience</TabsTrigger>
+                </TabsList>
+                <TabsList className="grid w-full grid-cols-3 mb-4 h-auto">
+                  <TabsTrigger value="projects" className="text-xs py-2">Projects</TabsTrigger>
+                  <TabsTrigger value="skills" className="text-xs py-2">Skills</TabsTrigger>
+                  <TabsTrigger value="hobbies" className="text-xs py-2">Hobbies</TabsTrigger>
+                </TabsList>
+                <Separator className="my-3" />
+                <TabsContent value="profile" className="mt-0">
+                  <CVForm formData={formData} setFormData={setFormData} section="profile" />
+                </TabsContent>
+                <TabsContent value="education" className="mt-0">
+                  <CVForm formData={formData} setFormData={setFormData} section="education" />
+                </TabsContent>
+                <TabsContent value="experience" className="mt-0">
+                  <CVForm formData={formData} setFormData={setFormData} section="experience" />
+                </TabsContent>
+                <TabsContent value="projects" className="mt-0">
+                  <CVForm formData={formData} setFormData={setFormData} section="projects" />
+                </TabsContent>
+                <TabsContent value="skills" className="mt-0">
+                  <CVForm formData={formData} setFormData={setFormData} section="skills" />
+                </TabsContent>
+                <TabsContent value="hobbies" className="mt-0">
+                  <CVForm formData={formData} setFormData={setFormData} section="hobbies" />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Desktop/Tablet: Side by Side Layout */}
+        <div className="hidden md:grid md:grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 animate-in-up">
+          <Card className="print:hidden elevated hover-raise animate-in-left">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                Resume Details
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="profile" className="w-full">
-                <TabsList className="flex flex-wrap">
-                  <TabsTrigger value="profile">Profile</TabsTrigger>
-                  <TabsTrigger value="education">Education</TabsTrigger>
-                  <TabsTrigger value="experience">Experience</TabsTrigger>
-                  <TabsTrigger value="projects">Projects</TabsTrigger>
-                  <TabsTrigger value="skills">Skills</TabsTrigger>
-                  <TabsTrigger value="hobbies">Hobbies</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-4">
+                  <TabsTrigger value="profile" className="text-xs">Profile</TabsTrigger>
+                  <TabsTrigger value="education" className="text-xs">Education</TabsTrigger>
+                  <TabsTrigger value="experience" className="text-xs">Experience</TabsTrigger>
+                  <TabsTrigger value="projects" className="text-xs">Projects</TabsTrigger>
+                  <TabsTrigger value="skills" className="text-xs">Skills</TabsTrigger>
+                  <TabsTrigger value="hobbies" className="text-xs">Hobbies</TabsTrigger>
                 </TabsList>
-                <Separator className="my-3" />
-                <TabsContent value="profile">
+                <Separator className="my-4" />
+                <TabsContent value="profile" className="mt-0">
                   <CVForm formData={formData} setFormData={setFormData} section="profile" />
                 </TabsContent>
-                <TabsContent value="education">
+                <TabsContent value="education" className="mt-0">
                   <CVForm formData={formData} setFormData={setFormData} section="education" />
                 </TabsContent>
-                <TabsContent value="experience">
+                <TabsContent value="experience" className="mt-0">
                   <CVForm formData={formData} setFormData={setFormData} section="experience" />
                 </TabsContent>
-                <TabsContent value="projects">
+                <TabsContent value="projects" className="mt-0">
                   <CVForm formData={formData} setFormData={setFormData} section="projects" />
                 </TabsContent>
-                <TabsContent value="skills">
+                <TabsContent value="skills" className="mt-0">
                   <CVForm formData={formData} setFormData={setFormData} section="skills" />
                 </TabsContent>
-                <TabsContent value="hobbies">
+                <TabsContent value="hobbies" className="mt-0">
                   <CVForm formData={formData} setFormData={setFormData} section="hobbies" />
                 </TabsContent>
               </Tabs>
             </CardContent>
           </Card>
 
-          <Card className="overflow-hidden elevated hover-raise">
-            <CardHeader className="pb-2">
+          <Card className="overflow-hidden elevated hover-raise animate-in-right">
+            <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
-                <CardTitle>Live Preview</CardTitle>
-                <div className="text-xs" role="status" aria-live="polite">
+                <CardTitle className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                  Live Preview
+                </CardTitle>
+                <div className="flex items-center gap-2" role="status" aria-live="polite">
                   {isValid ? (
-                    <span className="status-green">Ready</span>
+                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium animate-pulse-glow">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      Ready
+                    </div>
                   ) : (
-                    <span className="status-amber">Enter name, email, and phone</span>
+                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
+                      <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                      Enter name, email, and phone
+                    </div>
                   )}
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div id="preview" className="preview-surface glow-surface">
-                <CVPreview formData={formData} template={template} />
+              <div id="preview" className="preview-surface glow-surface rounded-lg overflow-hidden relative">
+                <div className="animate-in-scale">
+                  <CVPreview formData={formData} template={template} />
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="flex items-center justify-end gap-2 print:hidden">
-          <Button onClick={onPrint} disabled={!isValid}>
-            <Download className="mr-2 h-4 w-4" />
-            Download as PDF
-          </Button>
+        {/* Action Buttons - Responsive */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-4 print:hidden animate-in-up animate-delay-300">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
+            <Button variant="outline" onClick={onExportJSON} className="btn-enhanced justify-center sm:justify-start">
+              <FileDown className="mr-2 h-4 w-4" />
+              <span className="hidden xs:inline">Export JSON</span>
+              <span className="xs:hidden">JSON</span>
+            </Button>
+            <Button onClick={() => setShowExport(true)} disabled={!isValid} className="btn-enhanced justify-center sm:justify-start">
+              <Download className="mr-2 h-4 w-4" />
+              <span className="hidden xs:inline">Export Options</span>
+              <span className="xs:hidden">Export</span>
+            </Button>
+            <Button onClick={onPrint} disabled={!isValid} variant="outline" className="btn-enhanced justify-center sm:justify-start">
+              <Printer className="mr-2 h-4 w-4" />
+              <span className="hidden xs:inline">Quick PDF</span>
+              <span className="xs:hidden">PDF</span>
+            </Button>
+          </div>
         </div>
-      </div>
+      </main>
 
       {/* Floating mode toggle */}
       <div className="fixed bottom-4 right-4 z-50 print:hidden">
@@ -420,6 +551,36 @@ export default function App() {
         template={template}
         onPrint={onPrint}
       />
+
+      {/* Customization Panel */}
+      {showCustomizer && (
+        <CustomizationPanel
+          open={showCustomizer}
+          onClose={() => setShowCustomizer(false)}
+          customizations={customizations}
+          setCustomizations={setCustomizations}
+        />
+      )}
+
+      {/* Export Panel */}
+      {showExport && (
+        <ExportPDF
+          open={showExport}
+          onClose={() => setShowExport(false)}
+          formData={formData}
+          template={template}
+          onPrint={onPrint}
+        />
+      )}
+
+      {/* Resume Scorer */}
+      {showScorer && (
+        <ResumeScorer
+          open={showScorer}
+          onClose={() => setShowScorer(false)}
+          formData={formData}
+        />
+      )}
     </div>
   )
 }

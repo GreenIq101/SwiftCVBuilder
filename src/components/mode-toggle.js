@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, Monitor } from "lucide-react"
 
 const STORAGE_KEY = "theme"
 
@@ -20,6 +20,7 @@ function applyThemeClass(nextTheme) {
 export default function ModeToggle() {
   const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState("system")
+  const [isAnimating, setIsAnimating] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -41,36 +42,90 @@ export default function ModeToggle() {
     } catch {}
   }, [theme, mounted])
 
+  // Listen for system theme changes
+  useEffect(() => {
+    if (!mounted) return
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    const handleChange = () => {
+      if (theme === "system") {
+        const effective = getSystemPrefersDark() ? "dark" : "light"
+        applyThemeClass(effective)
+      }
+    }
+
+    mediaQuery.addEventListener("change", handleChange)
+    return () => mediaQuery.removeEventListener("change", handleChange)
+  }, [theme, mounted])
+
   const toggle = () => {
+    setIsAnimating(true)
+    setTimeout(() => setIsAnimating(false), 300)
+
     setTheme((t) => {
-      if (t === "dark") return "light"
-      const sysDark = getSystemPrefersDark()
-      return t === "light" ? (sysDark ? "system" : "dark") : "dark"
+      if (t === "light") return "dark"
+      if (t === "dark") return "system"
+      return "light"
     })
   }
 
-  const icon = !mounted ? (
-    <Sun className="h-5 w-5" />
-  ) : theme === "dark" ? (
-    <Sun className="h-5 w-5" />
-  ) : (
-    <Moon className="h-5 w-5" />
-  )
+  const getIcon = () => {
+    if (!mounted) return <Sun className="h-4 w-4" />
+
+    switch (theme) {
+      case "dark":
+        return <Moon className="h-4 w-4" />
+      case "system":
+        return <Monitor className="h-4 w-4" />
+      default:
+        return <Sun className="h-4 w-4" />
+    }
+  }
+
+  const getLabel = () => {
+    if (!mounted) return "Toggle theme"
+    switch (theme) {
+      case "dark":
+        return "Switch to light mode"
+      case "system":
+        return "Switch to dark mode"
+      default:
+        return "Switch to system mode"
+    }
+  }
 
   return (
     <button
       onClick={toggle}
-      aria-label="Toggle color mode"
-      title="Toggle color mode"
-      className="
-        p-2 rounded-full 
-        bg-gray-200 hover:bg-gray-300 
-        dark:bg-gray-700 dark:hover:bg-gray-600 
-        text-gray-800 dark:text-gray-200 
-        shadow-md transition-colors
-      "
+      aria-label={getLabel()}
+      title={getLabel()}
+      className={`
+        relative p-2 rounded-xl
+        bg-background/80 backdrop-blur-sm border border-border/50
+        hover:bg-accent/10 hover:border-border
+        text-foreground/80 hover:text-foreground
+        shadow-sm hover:shadow-md
+        transition-all duration-300 ease-out
+        hover:scale-105 active:scale-95
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+        ${isAnimating ? 'animate-pulse' : ''}
+      `}
     >
-      {icon}
+      <div className={`
+        relative transition-transform duration-300 ease-out
+        ${isAnimating ? 'rotate-180 scale-110' : 'rotate-0 scale-100'}
+      `}>
+        {getIcon()}
+      </div>
+
+      {/* Subtle glow effect on hover */}
+      <div className="
+        absolute inset-0 rounded-xl opacity-0
+        bg-gradient-to-br from-primary/10 via-transparent to-accent/10
+        transition-opacity duration-300
+        hover:opacity-100
+        pointer-events-none
+      " />
     </button>
   )
 }
