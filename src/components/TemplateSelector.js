@@ -17,45 +17,47 @@ import {
 } from "lucide-react"
 
 const items = [
-  { id: "classic", name: "Classic Glass", icon: Palette, color: "from-blue-500 to-blue-600" },
-  { id: "dark", name: "Dark Block", icon: MoonStar, color: "from-gray-800 to-gray-900" },
-  { id: "gradient", name: "Modern Gradient", icon: Paintbrush, color: "from-purple-500 to-pink-500" },
-  { id: "compact", name: "Compact Pro", icon: SquareStack, color: "from-green-500 to-green-600" },
-  { id: "creative", name: "Creative Cards", icon: Sparkles, color: "from-yellow-500 to-orange-500" },
-  { id: "minimal", name: "Minimal White", icon: Minus, color: "from-gray-500 to-gray-600" },
-  { id: "sidebar", name: "Accent Sidebar", icon: LayoutPanelLeft, color: "from-indigo-500 to-indigo-600" },
-  { id: "timeline", name: "Timeline", icon: History, color: "from-red-500 to-red-600" },
-  { id: "serif", name: "Elegant Serif", icon: Italic, color: "from-teal-500 to-teal-600" },
-  { id: "europass", name: "Europass", icon: IdCard, color: "from-cyan-500 to-cyan-600" },
-  { id: "split", name: "Split Pro", icon: Columns3, color: "from-pink-500 to-pink-600" },
-  { id: "banner", name: "Photo Banner", icon: Image, color: "from-violet-500 to-violet-600" },
+  { id: "classic", name: "Classic Glass", icon: Palette, bgClass: "bg-primary" },
+  { id: "dark", name: "Dark Block", icon: MoonStar, bgClass: "bg-dark" },
+  { id: "gradient", name: "Modern Gradient", icon: Paintbrush, bgClass: "bg-gradient" },
+  { id: "compact", name: "Compact Pro", icon: SquareStack, bgClass: "bg-success" },
+  { id: "creative", name: "Creative Cards", icon: Sparkles, bgClass: "bg-warning" },
+  { id: "minimal", name: "Minimal White", icon: Minus, bgClass: "bg-secondary" },
+  { id: "sidebar", name: "Accent Sidebar", icon: LayoutPanelLeft, bgClass: "bg-info" },
+  { id: "timeline", name: "Timeline", icon: History, bgClass: "bg-danger" },
+  { id: "serif", name: "Elegant Serif", icon: Italic, bgClass: "bg-teal" },
+  { id: "europass", name: "Europass", icon: IdCard, bgClass: "bg-cyan" },
+  { id: "split", name: "Split Pro", icon: Columns3, bgClass: "bg-pink" },
+  { id: "banner", name: "Photo Banner", icon: Image, bgClass: "bg-purple" },
 ]
 
 export default function TemplateSelector({ template = "classic", setTemplate = () => {} }) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
-    <div className="relative">
+    <div className="position-relative">
       {/* Compact view - shows only active template */}
-      <div className="flex items-center gap-2">
+      <div className="d-flex align-items-center gap-2">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-background/80 backdrop-blur-sm border border-border hover:border-primary/50 transition-all duration-200 hover-lift"
+          className="btn btn-outline-secondary d-flex align-items-center gap-2 px-3 py-2 rounded-3 bg-white bg-opacity-75 border shadow-sm animate-fade-in"
         >
           {(() => {
             const activeItem = items.find(it => it.id === template)
             const Icon = activeItem?.icon || Palette
             return (
               <>
-                <div className={`w-4 h-4 rounded bg-gradient-to-br ${activeItem?.color} flex items-center justify-center`}>
-                  <Icon className="h-3 w-3 text-white" />
+                <div className={`rounded-2 d-flex align-items-center justify-content-center ${activeItem?.bgClass} text-white`}
+                     style={{width: "16px", height: "16px"}}>
+                  <Icon style={{width: "12px", height: "12px"}} />
                 </div>
-                <span className="text-sm font-medium hidden sm:inline">{activeItem?.name}</span>
+                <span className="fw-medium small d-none d-sm-inline">{activeItem?.name}</span>
                 <svg
-                  className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                  className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  style={{width: "16px", height: "16px"}}
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -67,62 +69,49 @@ export default function TemplateSelector({ template = "classic", setTemplate = (
 
       {/* Expanded view - shows all templates */}
       {isExpanded && (
-        <div className="absolute top-full left-0 mt-2 w-80 bg-background/95 backdrop-blur-sm border border-border rounded-xl shadow-xl p-4 z-50 animate-in-scale">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="position-absolute top-100 start-0 mt-2 bg-white bg-opacity-95 border rounded-4 shadow-lg p-4 animate-fade-in-up"
+             style={{width: "320px", zIndex: 1050}}>
+          <div className="row g-3">
             {items.map((it, index) => {
               const Icon = it.icon
               const active = template === it.id
               return (
-                <button
-                  key={it.id}
-                  type="button"
-                  onClick={() => {
-                    setTemplate(it.id)
-                    setIsExpanded(false)
-                  }}
-                  className={`
-                    group relative p-3 rounded-lg border transition-all duration-200 hover-lift
-                    ${active
-                      ? 'border-primary bg-primary/5 shadow-md'
-                      : 'border-border hover:border-primary/50 hover:bg-accent/5'
-                    }
-                    animate-in-up
-                  `}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                  aria-pressed={active}
-                  aria-label={`Select ${it.name} template`}
-                  title={it.name}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`
-                      w-10 h-10 rounded-lg bg-gradient-to-br ${it.color}
-                      flex items-center justify-center shadow-sm
-                      group-hover:scale-110 transition-transform duration-200
-                    `}>
-                      <Icon className="h-5 w-5 text-white" />
-                    </div>
-                    <div className="flex-1 text-left">
-                      <div className={`font-medium text-sm ${active ? 'text-primary' : 'text-foreground'}`}>
-                        {it.name}
+                <div key={it.id} className="col-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTemplate(it.id)
+                      setIsExpanded(false)
+                    }}
+                    className={`card card-modern h-100 border-0 shadow-sm transition-all animate-fade-in ${active ? 'border-primary bg-primary bg-opacity-5' : 'hover-shadow'}`}
+                    style={{animationDelay: `${index * 50}ms`}}
+                    aria-pressed={active}
+                    aria-label={`Select ${it.name} template`}
+                    title={it.name}
+                  >
+                    <div className="card-body p-3 text-center">
+                      <div className={`rounded-3 d-flex align-items-center justify-content-center mx-auto mb-2 ${it.bgClass} text-white`}
+                           style={{width: "40px", height: "40px"}}>
+                        <Icon style={{width: "20px", height: "20px"}} />
                       </div>
+                      <h6 className={`card-title mb-1 small fw-bold ${active ? 'text-primary' : ''}`}>
+                        {it.name}
+                      </h6>
                       {active && (
-                        <div className="flex items-center gap-1 mt-1">
-                          <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-                          <span className="text-xs text-primary font-medium">Active</span>
+                        <div className="d-flex align-items-center justify-content-center gap-1">
+                          <div className="bg-primary rounded-circle animate-pulse" style={{width: "8px", height: "8px"}}></div>
+                          <small className="text-primary fw-medium">Active</small>
                         </div>
                       )}
                     </div>
-                  </div>
-
-                  {/* Hover effect overlay */}
-                  <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
-                </button>
+                  </button>
+                </div>
               )
             })}
           </div>
 
-          <div className="mt-4 pt-3 border-t border-border">
-            <p className="text-xs text-muted-foreground text-center">
+          <div className="mt-3 pt-3 border-top">
+            <p className="text-muted small text-center mb-0">
               Choose a template to preview your resume
             </p>
           </div>
@@ -132,7 +121,8 @@ export default function TemplateSelector({ template = "classic", setTemplate = (
       {/* Backdrop to close expanded view */}
       {isExpanded && (
         <div
-          className="fixed inset-0 z-40"
+          className="position-fixed top-0 start-0 w-100 h-100"
+          style={{zIndex: 1040, backgroundColor: "rgba(0,0,0,0.1)"}}
           onClick={() => setIsExpanded(false)}
         />
       )}

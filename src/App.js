@@ -1,18 +1,12 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Button } from "./components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs"
-import { Separator } from "./components/ui/separator"
-import { Download, FileDown, Printer, List, Palette, Target } from "lucide-react"
 import CVForm from "./components/CVForm"
 import CVPreview from "./components/CVPreview"
 import TemplateSelector from "./components/TemplateSelector"
 import ModeToggle from "./components/mode-toggle"
 import { useToast, Toaster } from "./hooks/use-toast"
 import FullscreenPreview from "./components/fullscreen-preview"
-import CursorLight from "./components/cursor-light"
 import AuthScreen from "./components/auth-screen"
 import UserMenu from "./components/user-menu"
 import CVManager from "./components/cv-manager"
@@ -148,42 +142,60 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-6 animate-in-fade">
-          {/* Logo and Brand */}
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-pulse">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <div className="space-y-1">
-              <div className="h-6 w-32 bg-muted rounded animate-pulse"></div>
-              <div className="h-4 w-24 bg-muted/60 rounded animate-pulse"></div>
-            </div>
-          </div>
+      <div className="min-vh-100 d-flex align-items-center justify-content-center bg-pattern">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-6">
+              <div className="text-center glass-card p-5 rounded-4 shadow-glow animate-fade-in">
+                {/* Logo and Brand */}
+                <div className="d-flex align-items-center justify-content-center mb-4">
+                  <div className="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+                    <i className="bi bi-file-earmark-text display-6 text-primary"></i>
+                  </div>
+                  <div>
+                    <h3 className="fw-bold mb-1 gradient-text">SwiftCV Builder</h3>
+                    <p className="text-muted small mb-0">Professional Resume Maker</p>
+                  </div>
+                </div>
 
-          {/* Loading Animation */}
-          <div className="relative">
-            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-16 h-16 border-4 border-accent/20 border-t-accent rounded-full animate-spin mx-auto animation-delay-300"></div>
-          </div>
+                {/* Loading Animation */}
+                <div className="position-relative mb-4">
+                  <div className="spinner-border text-primary mx-auto" role="status" style={{width: "3rem", height: "3rem"}}>
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <div className="position-absolute top-50 start-50 translate-middle">
+                    <div className="spinner-border text-secondary" role="status" style={{width: "2rem", height: "2rem"}}>
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Loading Text */}
-          <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-foreground">Loading SwiftCV Builder</h2>
-            <p className="text-muted-foreground animate-pulse">Preparing your workspace...</p>
-          </div>
+                {/* Loading Text */}
+                <div className="mb-4">
+                  <h4 className="fw-bold mb-2">Loading Your Workspace</h4>
+                  <p className="text-muted mb-0">Preparing templates and tools...</p>
+                </div>
 
-          {/* Skeleton Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mt-8">
-            <div className="space-y-3">
-              <div className="h-4 w-24 bg-muted rounded animate-pulse"></div>
-              <div className="h-32 bg-muted/50 rounded-lg animate-pulse"></div>
-            </div>
-            <div className="space-y-3">
-              <div className="h-4 w-32 bg-muted rounded animate-pulse"></div>
-              <div className="h-32 bg-muted/50 rounded-lg animate-pulse"></div>
+                {/* Skeleton Cards */}
+                <div className="row g-3">
+                  <div className="col-6">
+                    <div className="bg-light bg-opacity-25 p-3 rounded-3">
+                      <div className="placeholder-glow">
+                        <div className="placeholder col-8 mb-2"></div>
+                        <div className="placeholder col-12" style={{height: "60px"}}></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="bg-light bg-opacity-25 p-3 rounded-3">
+                      <div className="placeholder-glow">
+                        <div className="placeholder col-10 mb-2"></div>
+                        <div className="placeholder col-12" style={{height: "60px"}}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -197,133 +209,131 @@ export default function App() {
   }
 
   return (
-    <div className="page-shell keyboard-navigation">
+    <div className="min-vh-100 bg-pattern">
       {/* Skip link for accessibility */}
-      <a href="#main-content" className="skip-link">
+      <a href="#main-content" className="visually-hidden-focusable position-absolute top-0 start-0 z-index-999 px-3 py-2 bg-primary text-white text-decoration-none rounded">
         Skip to main content
       </a>
 
       <Toaster />
-      <CursorLight />
 
-      {/* Modern Header */}
-      <header className="app-header">
-        <div className="header-container">
-          <div className="header-brand">
-            <img src={LOGO_PATH} alt="SwiftCV Logo" className="header-logo" />
-            <span className="header-title hidden sm:inline">SwiftCV Builder</span>
-            <span className="header-title sm:hidden">SwiftCV</span>
-          </div>
+      {/* Modern Bootstrap Header */}
+      <nav className="navbar navbar-expand-lg navbar-modern fixed-top shadow-sm">
+        <div className="container">
+          <a className="navbar-brand navbar-brand-modern d-flex align-items-center" href="#">
+            <img src={LOGO_PATH} alt="SwiftCV Logo" className="me-2" style={{height: "32px", width: "32px"}} />
+            <span className="d-none d-sm-inline">SwiftCV Builder</span>
+            <span className="d-sm-none">SwiftCV</span>
+          </a>
 
-          <div className="header-actions">
-            {/* Desktop Layout */}
-            <div className="hidden md:flex header-stats">
-              <div className="stat-badge">
-                <span className="stat-label hidden lg:inline">Template:</span>
-                <TemplateSelector template={template} setTemplate={handleTemplateChange} />
-              </div>
-              <div className={`status-indicator ${isValid ? 'valid' : 'invalid'}`}>
-                <div className="status-dot"></div>
-                <span className="hidden sm:inline">{isValid ? 'Ready' : 'Incomplete'}</span>
-                <span className="sm:hidden">{isValid ? '✓' : '!'}</span>
-              </div>
-            </div>
+          <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span className="navbar-toggler-icon"></span>
+          </button>
 
-            <div className="header-buttons">
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav me-auto">
+              <li className="nav-item d-none d-lg-block">
+                <div className="d-flex align-items-center">
+                  <span className="text-muted small me-2">Template:</span>
+                  <TemplateSelector template={template} setTemplate={handleTemplateChange} />
+                </div>
+              </li>
+              <li className="nav-item">
+                <div className={`badge ${isValid ? 'bg-success' : 'bg-warning'} d-flex align-items-center gap-1`}>
+                  <div className={`rounded-circle ${isValid ? 'bg-success' : 'bg-warning'}`} style={{width: "6px", height: "6px"}}></div>
+                  <span className="d-none d-sm-inline">{isValid ? 'Ready' : 'Incomplete'}</span>
+                  <span className="d-sm-none">{isValid ? '✓' : '!'}</span>
+                </div>
+              </li>
+            </ul>
+
+            <div className="d-flex align-items-center gap-2">
               {/* Desktop Buttons */}
-              <div className="hidden sm:flex gap-2">
-                <Button
-                  variant="outline"
+              <div className="d-none d-sm-flex gap-2">
+                <button
+                  className="btn btn-outline-primary btn-sm"
                   onClick={() => setShowCustomizer(true)}
-                  className="header-btn"
-                  size="sm"
                 >
-                  <Palette className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
-                  <span className="hidden lg:inline">Customize</span>
-                </Button>
+                  <i className="bi bi-palette me-1"></i>
+                  <span className="d-none d-lg-inline">Customize</span>
+                </button>
 
-                <Button
-                  variant="outline"
+                <button
+                  className="btn btn-outline-primary btn-sm"
                   onClick={() => setShowScorer(true)}
-                  className="header-btn"
-                  size="sm"
                 >
-                  <Target className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
-                  <span className="hidden lg:inline">Score CV</span>
-                </Button>
+                  <i className="bi bi-target me-1"></i>
+                  <span className="d-none d-lg-inline">Score CV</span>
+                </button>
 
-                <Button
+                <button
+                  className="btn btn-gradient btn-sm"
                   onClick={() => setShowExport(true)}
                   disabled={!isValid}
-                  className="header-btn primary"
-                  size="sm"
                 >
-                  <Download className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
-                  <span className="hidden lg:inline">Export</span>
-                </Button>
+                  <i className="bi bi-download me-1"></i>
+                  <span className="d-none d-lg-inline">Export</span>
+                </button>
               </div>
 
               {/* Mobile Template Selector */}
-              <div className="md:hidden">
+              <div className="d-lg-none">
                 <TemplateSelector template={template} setTemplate={handleTemplateChange} />
               </div>
 
               {user ? (
                 <UserMenu user={user} onOpenManager={() => setShowManager(true)} />
               ) : (
-                <Button variant="outline" onClick={() => setShowManager(true)} className="header-btn" size="sm">
-                  <List className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
-                  <span className="hidden sm:inline">Sign in</span>
-                </Button>
+                <button className="btn btn-outline-primary btn-sm" onClick={() => setShowManager(true)}>
+                  <i className="bi bi-list me-1"></i>
+                  <span className="d-none d-sm-inline">Sign in</span>
+                </button>
               )}
 
               <ModeToggle />
             </div>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile Action Bar */}
-        <div className="sm:hidden mobile-action-bar">
-          <Button
-            variant="outline"
+      {/* Mobile Action Bar */}
+      <div className="d-sm-none fixed-bottom bg-white border-top p-3">
+        <div className="d-flex justify-content-around">
+          <button
+            className="btn btn-outline-primary btn-sm rounded-circle p-2"
             onClick={() => setShowCustomizer(true)}
-            className="mobile-action-btn"
-            size="sm"
           >
-            <Palette className="h-4 w-4" />
-          </Button>
+            <i className="bi bi-palette"></i>
+          </button>
 
-          <Button
-            variant="outline"
+          <button
+            className="btn btn-outline-primary btn-sm rounded-circle p-2"
             onClick={() => setShowScorer(true)}
-            className="mobile-action-btn"
-            size="sm"
           >
-            <Target className="h-4 w-4" />
-          </Button>
+            <i className="bi bi-target"></i>
+          </button>
 
-          <Button
+          <button
+            className="btn btn-gradient btn-sm rounded-circle p-2"
             onClick={() => setShowExport(true)}
             disabled={!isValid}
-            className="mobile-action-btn primary"
-            size="sm"
           >
-            <Download className="h-4 w-4" />
-          </Button>
+            <i className="bi bi-download"></i>
+          </button>
         </div>
-      </header>
+      </div>
 
       {/* If not signed in and manager requested, show auth UI inside manager overlay */}
       {!user && showManager ? (
-        <div className="overlay" role="dialog" aria-modal="true" aria-label="Sign In">
-          <div className="overlay-toolbar">
-            <Button variant="outline" onClick={() => setShowManager(false)}>
-              Close
-            </Button>
-          </div>
-          <div className="overlay-content">
-            <div className="overlay-surface" style={{ maxWidth: 720 }}>
-              <AuthScreen />
+        <div className="modal fade show d-block" style={{backgroundColor: "rgba(0,0,0,0.5)"}} role="dialog" aria-modal="true" aria-label="Sign In">
+          <div className="modal-dialog modal-lg modal-dialog-centered">
+            <div className="modal-content border-0 shadow-glow">
+              <div className="modal-header border-0 bg-transparent">
+                <button type="button" className="btn-close" onClick={() => setShowManager(false)} aria-label="Close"></button>
+              </div>
+              <div className="modal-body p-0">
+                <AuthScreen />
+              </div>
             </div>
           </div>
         </div>
@@ -345,201 +355,221 @@ export default function App() {
       ) : null}
 
       {/* Main content */}
-      <main id="main-content" className="container space-y-4 md:space-y-6 animate-in-fade">
-        {/* Mobile: Preview First, Form Second */}
-        <div className="block md:hidden space-y-4">
-          {/* Mobile Preview */}
-          <Card className="overflow-hidden elevated hover-raise animate-in-up">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <svg className="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
+      <main id="main-content" className="container-fluid mt-5 pt-5 animate-fade-in">
+        <div className="container">
+          {/* Mobile: Preview First, Form Second */}
+          <div className="d-block d-md-none">
+            {/* Mobile Preview */}
+            <div className="card card-modern mb-4 shadow-sm animate-slide-in-left">
+              <div className="card-header bg-white border-0">
+                <div className="d-flex align-items-center">
+                  <div className="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                    <i className="bi bi-eye text-primary"></i>
                   </div>
-                  Preview
-                </CardTitle>
-                <div className="flex items-center gap-1" role="status" aria-live="polite">
+                  <h5 className="card-title mb-0 fw-bold">Live Preview</h5>
+                </div>
+              </div>
+              <div className="card-body p-3">
+                <div className="d-flex align-items-center justify-content-between mb-3">
                   {isValid ? (
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                    <span className="badge bg-success d-flex align-items-center">
+                      <div className="bg-white bg-opacity-25 rounded-circle me-1" style={{width: "6px", height: "6px"}}></div>
                       Ready
-                    </div>
+                    </span>
                   ) : (
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
-                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-500"></div>
+                    <span className="badge bg-warning d-flex align-items-center">
+                      <div className="bg-white bg-opacity-25 rounded-circle me-1" style={{width: "6px", height: "6px"}}></div>
                       Incomplete
-                    </div>
+                    </span>
                   )}
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent className="p-3">
-              <div id="preview" className="preview-surface glow-surface rounded-lg overflow-hidden relative">
-                <div className="animate-in-scale scale-90 origin-top">
-                  <CVPreview formData={formData} template={template} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Mobile Form */}
-          <Card className="print:hidden elevated hover-raise animate-in-up animate-delay-100">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <svg className="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                Edit Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-3">
-              <Tabs defaultValue="profile" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 mb-3 h-auto">
-                  <TabsTrigger value="profile" className="text-xs py-2">Profile</TabsTrigger>
-                  <TabsTrigger value="education" className="text-xs py-2">Education</TabsTrigger>
-                  <TabsTrigger value="experience" className="text-xs py-2">Experience</TabsTrigger>
-                </TabsList>
-                <TabsList className="grid w-full grid-cols-3 mb-4 h-auto">
-                  <TabsTrigger value="projects" className="text-xs py-2">Projects</TabsTrigger>
-                  <TabsTrigger value="skills" className="text-xs py-2">Skills</TabsTrigger>
-                  <TabsTrigger value="hobbies" className="text-xs py-2">Hobbies</TabsTrigger>
-                </TabsList>
-                <Separator className="my-3" />
-                <TabsContent value="profile" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="profile" />
-                </TabsContent>
-                <TabsContent value="education" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="education" />
-                </TabsContent>
-                <TabsContent value="experience" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="experience" />
-                </TabsContent>
-                <TabsContent value="projects" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="projects" />
-                </TabsContent>
-                <TabsContent value="skills" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="skills" />
-                </TabsContent>
-                <TabsContent value="hobbies" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="hobbies" />
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Desktop/Tablet: Side by Side Layout */}
-        <div className="hidden md:grid md:grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 animate-in-up">
-          <Card className="print:hidden elevated hover-raise animate-in-left">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                Resume Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="profile" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-4">
-                  <TabsTrigger value="profile" className="text-xs">Profile</TabsTrigger>
-                  <TabsTrigger value="education" className="text-xs">Education</TabsTrigger>
-                  <TabsTrigger value="experience" className="text-xs">Experience</TabsTrigger>
-                  <TabsTrigger value="projects" className="text-xs">Projects</TabsTrigger>
-                  <TabsTrigger value="skills" className="text-xs">Skills</TabsTrigger>
-                  <TabsTrigger value="hobbies" className="text-xs">Hobbies</TabsTrigger>
-                </TabsList>
-                <Separator className="my-4" />
-                <TabsContent value="profile" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="profile" />
-                </TabsContent>
-                <TabsContent value="education" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="education" />
-                </TabsContent>
-                <TabsContent value="experience" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="experience" />
-                </TabsContent>
-                <TabsContent value="projects" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="projects" />
-                </TabsContent>
-                <TabsContent value="skills" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="skills" />
-                </TabsContent>
-                <TabsContent value="hobbies" className="mt-0">
-                  <CVForm formData={formData} setFormData={setFormData} section="hobbies" />
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden elevated hover-raise animate-in-right">
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
+                <div id="preview" className="border rounded-3 overflow-hidden bg-white shadow-sm">
+                  <div className="animate-fade-in">
+                    <CVPreview formData={formData} template={template} />
                   </div>
-                  Live Preview
-                </CardTitle>
-                <div className="flex items-center gap-2" role="status" aria-live="polite">
-                  {isValid ? (
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium animate-pulse-glow">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      Ready
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">
-                      <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                      Enter name, email, and phone
-                    </div>
-                  )}
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div id="preview" className="preview-surface glow-surface rounded-lg overflow-hidden relative">
-                <div className="animate-in-scale">
-                  <CVPreview formData={formData} template={template} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
 
-        {/* Action Buttons - Responsive */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-4 print:hidden animate-in-up animate-delay-300">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
-            <Button variant="outline" onClick={onExportJSON} className="btn-enhanced justify-center sm:justify-start">
-              <FileDown className="mr-2 h-4 w-4" />
-              <span className="hidden xs:inline">Export JSON</span>
-              <span className="xs:hidden">JSON</span>
-            </Button>
-            <Button onClick={() => setShowExport(true)} disabled={!isValid} className="btn-enhanced justify-center sm:justify-start">
-              <Download className="mr-2 h-4 w-4" />
-              <span className="hidden xs:inline">Export Options</span>
-              <span className="xs:hidden">Export</span>
-            </Button>
-            <Button onClick={onPrint} disabled={!isValid} variant="outline" className="btn-enhanced justify-center sm:justify-start">
-              <Printer className="mr-2 h-4 w-4" />
-              <span className="hidden xs:inline">Quick PDF</span>
-              <span className="xs:hidden">PDF</span>
-            </Button>
+            {/* Mobile Form */}
+            <div className="card card-modern shadow-sm animate-slide-in-right d-print-none">
+              <div className="card-header bg-white border-0">
+                <div className="d-flex align-items-center">
+                  <div className="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                    <i className="bi bi-pencil text-primary"></i>
+                  </div>
+                  <h5 className="card-title mb-0 fw-bold">Edit Details</h5>
+                </div>
+              </div>
+              <div className="card-body p-3">
+                <ul className="nav nav-tabs nav-fill mb-3" id="mobileTabs" role="tablist">
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link active small" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">Profile</button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link small" id="education-tab" data-bs-toggle="tab" data-bs-target="#education" type="button" role="tab">Education</button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link small" id="experience-tab" data-bs-toggle="tab" data-bs-target="#experience" type="button" role="tab">Experience</button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link small" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects" type="button" role="tab">Projects</button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link small" id="skills-tab" data-bs-toggle="tab" data-bs-target="#skills" type="button" role="tab">Skills</button>
+                  </li>
+                  <li className="nav-item" role="presentation">
+                    <button className="nav-link small" id="hobbies-tab" data-bs-toggle="tab" data-bs-target="#hobbies" type="button" role="tab">Hobbies</button>
+                  </li>
+                </ul>
+
+                <div className="tab-content">
+                  <div className="tab-pane fade show active" id="profile" role="tabpanel">
+                    <CVForm formData={formData} setFormData={setFormData} section="profile" />
+                  </div>
+                  <div className="tab-pane fade" id="education" role="tabpanel">
+                    <CVForm formData={formData} setFormData={setFormData} section="education" />
+                  </div>
+                  <div className="tab-pane fade" id="experience" role="tabpanel">
+                    <CVForm formData={formData} setFormData={setFormData} section="experience" />
+                  </div>
+                  <div className="tab-pane fade" id="projects" role="tabpanel">
+                    <CVForm formData={formData} setFormData={setFormData} section="projects" />
+                  </div>
+                  <div className="tab-pane fade" id="skills" role="tabpanel">
+                    <CVForm formData={formData} setFormData={setFormData} section="skills" />
+                  </div>
+                  <div className="tab-pane fade" id="hobbies" role="tabpanel">
+                    <CVForm formData={formData} setFormData={setFormData} section="hobbies" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop/Tablet: Side by Side Layout */}
+          <div className="d-none d-md-block">
+            <div className="row g-4 animate-fade-in-up">
+              <div className="col-lg-6">
+                <div className="card card-modern shadow-sm h-100 d-print-none">
+                  <div className="card-header bg-white border-0">
+                    <div className="d-flex align-items-center">
+                      <div className="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                        <i className="bi bi-pencil text-primary"></i>
+                      </div>
+                      <h5 className="card-title mb-0 fw-bold">Resume Details</h5>
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <ul className="nav nav-tabs nav-fill mb-4" id="desktopTabs" role="tablist">
+                      <li className="nav-item" role="presentation">
+                        <button className="nav-link active small" id="desktop-profile-tab" data-bs-toggle="tab" data-bs-target="#desktop-profile" type="button" role="tab">Profile</button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button className="nav-link small" id="desktop-education-tab" data-bs-toggle="tab" data-bs-target="#desktop-education" type="button" role="tab">Education</button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button className="nav-link small" id="desktop-experience-tab" data-bs-toggle="tab" data-bs-target="#desktop-experience" type="button" role="tab">Experience</button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button className="nav-link small" id="desktop-projects-tab" data-bs-toggle="tab" data-bs-target="#desktop-projects" type="button" role="tab">Projects</button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button className="nav-link small" id="desktop-skills-tab" data-bs-toggle="tab" data-bs-target="#desktop-skills" type="button" role="tab">Skills</button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button className="nav-link small" id="desktop-hobbies-tab" data-bs-toggle="tab" data-bs-target="#desktop-hobbies" type="button" role="tab">Hobbies</button>
+                      </li>
+                    </ul>
+
+                    <div className="tab-content">
+                      <div className="tab-pane fade show active" id="desktop-profile" role="tabpanel">
+                        <CVForm formData={formData} setFormData={setFormData} section="profile" />
+                      </div>
+                      <div className="tab-pane fade" id="desktop-education" role="tabpanel">
+                        <CVForm formData={formData} setFormData={setFormData} section="education" />
+                      </div>
+                      <div className="tab-pane fade" id="desktop-experience" role="tabpanel">
+                        <CVForm formData={formData} setFormData={setFormData} section="experience" />
+                      </div>
+                      <div className="tab-pane fade" id="desktop-projects" role="tabpanel">
+                        <CVForm formData={formData} setFormData={setFormData} section="projects" />
+                      </div>
+                      <div className="tab-pane fade" id="desktop-skills" role="tabpanel">
+                        <CVForm formData={formData} setFormData={setFormData} section="skills" />
+                      </div>
+                      <div className="tab-pane fade" id="desktop-hobbies" role="tabpanel">
+                        <CVForm formData={formData} setFormData={setFormData} section="hobbies" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-lg-6">
+                <div className="card card-modern shadow-sm h-100">
+                  <div className="card-header bg-white border-0">
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div className="d-flex align-items-center">
+                        <div className="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                          <i className="bi bi-eye text-primary"></i>
+                        </div>
+                        <h5 className="card-title mb-0 fw-bold">Live Preview</h5>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        {isValid ? (
+                          <span className="badge bg-success d-flex align-items-center">
+                            <div className="bg-white bg-opacity-25 rounded-circle me-1" style={{width: "6px", height: "6px"}}></div>
+                            Ready
+                          </span>
+                        ) : (
+                          <span className="badge bg-warning d-flex align-items-center">
+                            <div className="bg-white bg-opacity-25 rounded-circle me-1" style={{width: "6px", height: "6px"}}></div>
+                            Enter name, email, and phone
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card-body p-0">
+                    <div id="preview" className="border rounded-bottom overflow-hidden bg-white">
+                      <div className="animate-fade-in">
+                        <CVPreview formData={formData} template={template} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons - Responsive */}
+          <div className="row justify-content-end mt-4 d-print-none animate-fade-in-up">
+            <div className="col-auto">
+              <div className="d-flex flex-column flex-sm-row gap-2">
+                <button className="btn btn-outline-primary" onClick={onExportJSON}>
+                  <i className="bi bi-file-earmark-arrow-down me-2"></i>
+                  <span className="d-none d-sm-inline">Export JSON</span>
+                  <span className="d-sm-none">JSON</span>
+                </button>
+                <button className="btn btn-gradient" onClick={() => setShowExport(true)} disabled={!isValid}>
+                  <i className="bi bi-download me-2"></i>
+                  <span className="d-none d-sm-inline">Export Options</span>
+                  <span className="d-sm-none">Export</span>
+                </button>
+                <button className="btn btn-outline-primary" onClick={onPrint} disabled={!isValid}>
+                  <i className="bi bi-printer me-2"></i>
+                  <span className="d-none d-sm-inline">Quick PDF</span>
+                  <span className="d-sm-none">PDF</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>
 
       {/* Floating mode toggle */}
-      <div className="fixed bottom-4 right-4 z-50 print:hidden">
+      <div className="position-fixed bottom-0 end-0 p-3 d-print-none" style={{zIndex: 1050}}>
         <ModeToggle />
       </div>
 

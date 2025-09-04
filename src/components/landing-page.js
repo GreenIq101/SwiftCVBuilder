@@ -1,41 +1,16 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Button } from "./ui/button"
-import {
-  ArrowRight,
-  Sparkles,
-  CloudDownload,
-  Eye,
-  Star,
-  ShieldCheck,
-  Wand2,
-  Layers,
-  CheckCircle,
-  Zap,
-  FileText,
-  Palette,
-  Target,
-  Users,
-  Award,
-  ChevronDown,
-  Play,
-  BarChart3,
-  Globe,
-  Smartphone,
-  Laptop,
-  Monitor
-} from "lucide-react"
 import AuthScreen from "./auth-screen"
 
 // Use images from src/Img folder
 const templates = [
-  { id: "classic", name: "Classic Glass", img: require("../Img/classic.png") },
-  { id: "europass", name: "Europass", img: require("../Img/europass.png") },
-  { id: "split", name: "Split Pro", img: require("../Img/split.png") },
-  { id: "banner", name: "Photo Banner", img: require("../Img/banner.png") },
-  { id: "dark", name: "Dark Block", img: require("../Img/dark.png") },
-  { id: "gradient", name: "Modern Gradient", img: require("../Img/gradient.png") },
+  { id: "classic", name: "Classic Glass", img: require("../Img/classic.png"), description: "Clean and professional" },
+  { id: "europass", name: "Europass", img: require("../Img/europass.png"), description: "European standard" },
+  { id: "split", name: "Split Pro", img: require("../Img/split.png"), description: "Modern two-column" },
+  { id: "banner", name: "Photo Banner", img: require("../Img/banner.png"), description: "Eye-catching header" },
+  { id: "dark", name: "Dark Block", img: require("../Img/dark.png"), description: "Sleek dark theme" },
+  { id: "gradient", name: "Modern Gradient", img: require("../Img/gradient.png"), description: "Colorful gradients" },
 ]
 
 const LOGO_PATH = require("../Img/logo.png")
@@ -43,157 +18,109 @@ const LOGO_PATH = require("../Img/logo.png")
 export default function LandingPage() {
   const [showAuth, setShowAuth] = useState(false)
   const featuresRef = useRef(null)
-  const templatesRef = useRef(null)
-  const [activeFeature, setActiveFeature] = useState(0)
 
   if (showAuth) return <AuthScreen />
 
   const scrollToFeatures = () => featuresRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-  const scrollToTemplates = () => templatesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-
-  const features = [
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: "Lightning Fast",
-      description: "Create professional CVs in under 5 minutes with our intelligent templates and smart suggestions.",
-      stats: "5 min average"
-    },
-    {
-      icon: <Palette className="h-8 w-8" />,
-      title: "Beautiful Designs",
-      description: "Choose from 12+ professionally designed templates that make your CV stand out from the crowd.",
-      stats: "12+ templates"
-    },
-    {
-      icon: <Target className="h-8 w-8" />,
-      title: "ATS Optimized",
-      description: "Our templates are designed to pass Applicant Tracking Systems used by major companies.",
-      stats: "95% success rate"
-    },
-    {
-      icon: <BarChart3 className="h-8 w-8" />,
-      title: "Smart Analytics",
-      description: "Get detailed scoring and optimization tips to improve your CV's effectiveness.",
-      stats: "AI-powered"
-    }
-  ]
 
   return (
-    <div className="modern-landing">
+    <div className="min-vh-100">
       {/* Navigation */}
-      <nav className="modern-nav">
-        <div className="nav-container">
-          <div className="nav-brand">
-            <img src={LOGO_PATH} alt="SwiftCV Logo" className="nav-logo" />
-            <span className="nav-title">SwiftCV</span>
-          </div>
-          <div className="nav-links">
-            <button onClick={scrollToFeatures} className="nav-link">Features</button>
-            <button onClick={scrollToTemplates} className="nav-link">Templates</button>
-            <Button
-              onClick={() => setShowAuth(true)}
-              className="nav-cta"
-            >
-              Get Started
-            </Button>
+      <nav className="navbar navbar-expand-lg navbar-modern fixed-top">
+        <div className="container">
+          <a className="navbar-brand navbar-brand-modern d-flex align-items-center" href="#">
+            <img src={LOGO_PATH} alt="SwiftCV Logo" className="me-2" style={{height: "40px", width: "40px"}} />
+            SwiftCV Builder
+          </a>
+
+          <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <a className="nav-link" href="#features" onClick={scrollToFeatures}>Features</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#templates">Templates</a>
+              </li>
+              <li className="nav-item">
+                <button className="btn btn-gradient btn-sm ms-3" onClick={() => setShowAuth(true)}>
+                  Get Started
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-container">
-          <div className="hero-content">
-            <div className="hero-badge">
-              <Sparkles className="h-4 w-4" />
-              <span>New: AI-Powered CV Scoring</span>
-            </div>
-
-            <h1 className="hero-title">
-              Build Your Dream Career with
-              <span className="hero-accent"> Professional CVs</span>
-            </h1>
-
-            <p className="hero-subtitle">
-              Create stunning, ATS-optimized resumes in minutes. Join 50,000+ professionals who've landed their dream jobs with SwiftCV.
-            </p>
-
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-number">50K+</div>
-                <div className="stat-label">Happy Users</div>
+      <section className="hero-modern position-relative d-flex align-items-center">
+        <div className="container position-relative z-1">
+          <div className="row align-items-center min-vh-75">
+            <div className="col-lg-6 animate-fade-in-up">
+              <div className="badge bg-white bg-opacity-20 text-white px-3 py-2 rounded-pill mb-4 d-inline-block">
+                <i className="bi bi-stars me-1"></i>
+                Freemium: All templates unlocked!
               </div>
-              <div className="stat-item">
-                <div className="stat-number">95%</div>
-                <div className="stat-label">ATS Success</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">12+</div>
-                <div className="stat-label">Templates</div>
-              </div>
-            </div>
 
-            <div className="hero-actions">
-              <Button
-                size="lg"
-                onClick={() => setShowAuth(true)}
-                className="hero-primary-btn"
-              >
-                Start Building Free
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={scrollToFeatures}
-                className="hero-secondary-btn"
-              >
-                <Play className="mr-2 h-5 w-5" />
-                Watch Demo
-              </Button>
-            </div>
+              <h1 className="hero-title display-3 fw-bold text-white mb-4">
+                Build Your CV <span className="gradient-text">Faster</span> & <span className="gradient-text">Better</span>
+              </h1>
 
-            <div className="hero-trust">
-              <div className="trust-text">Trusted by professionals at</div>
-              <div className="trust-logos">
-                <div className="trust-logo">Google</div>
-                <div className="trust-logo">Microsoft</div>
-                <div className="trust-logo">Amazon</div>
-                <div className="trust-logo">Meta</div>
+              <p className="hero-subtitle lead text-white-50 mb-5">
+                SwiftCV Builder helps you create a modern, professional resume in minutes.
+                Choose from beautiful templates, preview live, and export instantly.
+                <span className="fw-bold text-warning"> No signup required for basic use!</span>
+              </p>
+
+              <div className="d-flex flex-column flex-sm-row gap-3 mb-5">
+                <button className="btn btn-gradient btn-lg px-4 py-3" onClick={() => setShowAuth(true)}>
+                  <i className="bi bi-rocket-takeoff me-2"></i>
+                  Start Building Free
+                </button>
+                <button className="btn btn-glass btn-lg px-4 py-3" onClick={scrollToFeatures}>
+                  <i className="bi bi-eye me-2"></i>
+                  Explore Templates
+                </button>
               </div>
-            </div>
-          </div>
 
-          <div className="hero-visual">
-            <div className="hero-mockup">
-              <div className="mockup-screen">
-                <div className="mockup-header">
-                  <div className="mockup-dots">
-                    <div className="dot red"></div>
-                    <div className="dot yellow"></div>
-                    <div className="dot green"></div>
+              <div className="row g-4 text-white-50">
+                <div className="col-sm-4">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-star-fill text-warning me-2 fs-5"></i>
+                    <span>10,000+ Users</span>
                   </div>
-                  <div className="mockup-title">SwiftCV Builder</div>
                 </div>
-                <div className="mockup-content">
-                  <div className="mockup-cv">
-                    <div className="cv-header">
-                      <div className="cv-photo"></div>
-                      <div className="cv-info">
-                        <div className="cv-name">John Smith</div>
-                        <div className="cv-title">Senior Developer</div>
-                      </div>
-                    </div>
-                    <div className="cv-body">
-                      <div className="cv-section">
-                        <div className="section-title">Experience</div>
-                        <div className="section-content">
-                          <div className="job-item">
-                            <div className="job-company">Tech Corp</div>
-                            <div className="job-role">Full Stack Developer</div>
-                          </div>
-                        </div>
-                      </div>
+                <div className="col-sm-4">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-shield-check text-success me-2 fs-5"></i>
+                    <span>Privacy First</span>
+                  </div>
+                </div>
+                <div className="col-sm-4">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-cloud-download text-info me-2 fs-5"></i>
+                    <span>One-Click PDF</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6 animate-fade-in">
+              <div className="text-center">
+                <div className="glass-card p-5 rounded-4 shadow-glow">
+                  <div className="mb-4">
+                    <i className="bi bi-file-earmark-text display-1 text-primary"></i>
+                  </div>
+                  <h3 className="h4 mb-3">Live Preview</h3>
+                  <p className="text-muted mb-4">See your changes instantly as you build</p>
+                  <div className="bg-light bg-opacity-10 p-3 rounded-3">
+                    <div className="text-start">
+                      <h5 className="mb-2">John Doe</h5>
+                      <p className="small text-muted mb-2">Frontend Developer</p>
+                      <p className="small mb-0">Experienced developer with 5+ years in React, Node.js, and modern web technologies.</p>
                     </div>
                   </div>
                 </div>
@@ -202,74 +129,99 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="hero-bg-elements">
-          <div className="bg-element element-1"></div>
-          <div className="bg-element element-2"></div>
-          <div className="bg-element element-3"></div>
-        </div>
+        {/* Background Elements */}
+        <div className="position-absolute top-0 start-0 w-100 h-100 bg-pattern"></div>
       </section>
 
       {/* Features Section */}
-      <section ref={featuresRef} className="features-section">
-        <div className="features-container">
-          <div className="features-header">
-            <div className="section-badge">Features</div>
-            <h2 className="section-title">Everything you need to succeed</h2>
-            <p className="section-subtitle">
-              Powerful tools and beautiful designs to make your CV stand out
-            </p>
+      <section id="features" ref={featuresRef} className="py-5 bg-light">
+        <div className="container">
+          <div className="row justify-content-center mb-5">
+            <div className="col-lg-8 text-center">
+              <h2 className="display-5 fw-bold mb-3">Why Choose SwiftCV?</h2>
+              <p className="lead text-muted">Everything you need to create a standout resume</p>
+            </div>
           </div>
 
-          <div className="features-grid">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className={`feature-card ${activeFeature === index ? 'active' : ''}`}
-                onMouseEnter={() => setActiveFeature(index)}
-              >
-                <div className="feature-icon">
-                  {feature.icon}
-                </div>
-                <div className="feature-content">
-                  <h3 className="feature-title">{feature.title}</h3>
-                  <p className="feature-description">{feature.description}</p>
-                  <div className="feature-stat">{feature.stats}</div>
+          <div className="row g-4">
+            <div className="col-md-4 animate-slide-in-left">
+              <div className="card card-modern h-100 border-0 shadow-sm">
+                <div className="card-body text-center p-4">
+                  <div className="mb-3">
+                    <i className="bi bi-lightning-charge display-4 text-primary"></i>
+                  </div>
+                  <h5 className="card-title fw-bold">Lightning Fast</h5>
+                  <p className="card-text text-muted">Create professional resumes in minutes with our intelligent templates and smart defaults.</p>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="col-md-4 animate-fade-in-up">
+              <div className="card card-modern h-100 border-0 shadow-sm">
+                <div className="card-body text-center p-4">
+                  <div className="mb-3">
+                    <i className="bi bi-eye display-4 text-success"></i>
+                  </div>
+                  <h5 className="card-title fw-bold">Live Preview</h5>
+                  <p className="card-text text-muted">See your changes instantly with our real-time preview system. No more guesswork.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-4 animate-slide-in-right">
+              <div className="card card-modern h-100 border-0 shadow-sm">
+                <div className="card-body text-center p-4">
+                  <div className="mb-3">
+                    <i className="bi bi-palette display-4 text-warning"></i>
+                  </div>
+                  <h5 className="card-title fw-bold">Beautiful Templates</h5>
+                  <p className="card-text text-muted">Choose from professionally designed templates that make your resume stand out.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Templates Section */}
-      <section ref={templatesRef} className="templates-section">
-        <div className="templates-container">
-          <div className="templates-header">
-            <div className="section-badge">Templates</div>
-            <h2 className="section-title">Professional designs that impress</h2>
-            <p className="section-subtitle">
-              Choose from our collection of ATS-optimized templates
-            </p>
+      <section id="templates" className="py-5">
+        <div className="container">
+          <div className="row justify-content-center mb-5">
+            <div className="col-lg-8 text-center">
+              <h2 className="display-5 fw-bold mb-3">Professional Templates</h2>
+              <p className="lead text-muted">Choose from our collection of ATS-optimized templates</p>
+              <div className="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                <i className="bi bi-gift me-1"></i>
+                Freemium: All templates free for a limited time
+              </div>
+            </div>
           </div>
 
-          <div className="templates-grid">
+          <div className="row g-4">
             {templates.map((template, index) => (
-              <div key={template.id} className="template-card" style={{ animationDelay: `${index * 100}ms` }}>
-                <div className="template-image">
-                  <img src={template.img} alt={template.name} />
-                  <div className="template-overlay">
-                    <Button
-                      size="sm"
-                      onClick={() => setShowAuth(true)}
-                      className="template-cta"
-                    >
-                      Use Template
-                    </Button>
+              <div key={template.id} className="col-lg-4 col-md-6 animate-fade-in-up" style={{animationDelay: `${index * 0.1}s`}}>
+                <div className="card card-modern h-100 border-0 shadow-sm overflow-hidden">
+                  <div className="position-relative">
+                    <img
+                      src={template.img}
+                      alt={`${template.name} template`}
+                      className="card-img-top"
+                      style={{height: "200px", objectFit: "cover"}}
+                    />
+                    <div className="position-absolute top-50 start-50 translate-middle">
+                      <button className="btn btn-primary btn-lg rounded-pill px-4">
+                        <i className="bi bi-eye me-2"></i>
+                        Preview
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="template-info">
-                  <h3 className="template-name">{template.name}</h3>
-                  <p className="template-description">Professional design perfect for {template.name.toLowerCase()} style CVs</p>
+                  <div className="card-body text-center">
+                    <h5 className="card-title fw-bold">{template.name}</h5>
+                    <p className="card-text text-muted small">{template.description}</p>
+                    <button className="btn btn-outline-primary btn-sm mt-2" onClick={() => setShowAuth(true)}>
+                      Use Template
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -278,72 +230,98 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="cta-section">
-        <div className="cta-container">
-          <div className="cta-content">
-            <h2 className="cta-title">Ready to build your perfect CV?</h2>
-            <p className="cta-subtitle">
-              Join thousands of professionals who've transformed their careers with SwiftCV
-            </p>
-            <div className="cta-features">
-              <div className="cta-feature">
-                <CheckCircle className="h-5 w-5 text-success" />
-                <span>All templates included</span>
-              </div>
-              <div className="cta-feature">
-                <CheckCircle className="h-5 w-5 text-success" />
-                <span>Unlimited exports</span>
-              </div>
-              <div className="cta-feature">
-                <CheckCircle className="h-5 w-5 text-success" />
-                <span>Cloud storage</span>
+      <section className="py-5 bg-primary text-white">
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-8">
+              <h2 className="display-5 fw-bold mb-3">Ready to Build Your Perfect CV?</h2>
+              <p className="lead mb-4 opacity-75">
+                Join thousands of professionals who have already created stunning resumes with SwiftCV Builder.
+              </p>
+              <div className="d-flex flex-column flex-sm-row gap-3">
+                <button className="btn btn-light btn-lg px-4 py-3" onClick={() => setShowAuth(true)}>
+                  <i className="bi bi-play-circle me-2"></i>
+                  Start Building Now
+                </button>
+                <div className="text-white-50">
+                  <small>✓ No credit card required<br />✓ All templates included<br />✓ Export to PDF instantly</small>
+                </div>
               </div>
             </div>
-            <Button
-              size="lg"
-              onClick={() => setShowAuth(true)}
-              className="cta-button"
-            >
-              Get Started Free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <div className="col-lg-4 text-center mt-4 mt-lg-0">
+              <div className="glass-card p-4 rounded-4">
+                <i className="bi bi-trophy display-3 text-warning mb-3"></i>
+                <h4 className="fw-bold mb-2">Free Forever</h4>
+                <p className="small opacity-75">Limited time offer - claim your premium features</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="modern-footer">
-        <div className="footer-container">
-          <div className="footer-brand">
-            <img src={LOGO_PATH} alt="SwiftCV Logo" className="footer-logo" />
-            <span className="footer-title">SwiftCV</span>
+      <footer className="bg-dark text-white py-5">
+        <div className="container">
+          <div className="row g-4">
+            <div className="col-lg-4">
+              <div className="d-flex align-items-center mb-3">
+                <img src={LOGO_PATH} alt="SwiftCV Logo" className="me-2" style={{height: "32px", width: "32px"}} />
+                <span className="fw-bold fs-5">SwiftCV Builder</span>
+              </div>
+              <p className="text-white-50 mb-3">
+                Create professional resumes with ease. Beautiful templates, live preview, and instant PDF export.
+              </p>
+              <div className="d-flex gap-3">
+                <a href="#" className="text-white-50 fs-5"><i className="bi bi-twitter"></i></a>
+                <a href="#" className="text-white-50 fs-5"><i className="bi bi-linkedin"></i></a>
+                <a href="#" className="text-white-50 fs-5"><i className="bi bi-github"></i></a>
+              </div>
+            </div>
+
+            <div className="col-lg-2 col-md-3">
+              <h6 className="fw-bold mb-3">Product</h6>
+              <ul className="list-unstyled">
+                <li><a href="#" className="text-white-50 text-decoration-none">Templates</a></li>
+                <li><a href="#" className="text-white-50 text-decoration-none">Features</a></li>
+                <li><a href="#" className="text-white-50 text-decoration-none">Pricing</a></li>
+                <li><a href="#" className="text-white-50 text-decoration-none">API</a></li>
+              </ul>
+            </div>
+
+            <div className="col-lg-2 col-md-3">
+              <h6 className="fw-bold mb-3">Support</h6>
+              <ul className="list-unstyled">
+                <li><a href="#" className="text-white-50 text-decoration-none">Help Center</a></li>
+                <li><a href="#" className="text-white-50 text-decoration-none">Contact Us</a></li>
+                <li><a href="#" className="text-white-50 text-decoration-none">Privacy Policy</a></li>
+                <li><a href="#" className="text-white-50 text-decoration-none">Terms of Service</a></li>
+              </ul>
+            </div>
+
+            <div className="col-lg-4">
+              <h6 className="fw-bold mb-3">Stay Updated</h6>
+              <p className="text-white-50 small mb-3">
+                Get the latest updates on new templates and features.
+              </p>
+              <div className="input-group">
+                <input type="email" className="form-control" placeholder="Enter your email" />
+                <button className="btn btn-primary" type="button">Subscribe</button>
+              </div>
+            </div>
           </div>
-          <div className="footer-links">
-            <div className="footer-section">
-              <h4>Product</h4>
-              <a href="#">Templates</a>
-              <a href="#">Features</a>
-              <a href="#">Pricing</a>
+
+          <hr className="my-4 opacity-25" />
+
+          <div className="row align-items-center">
+            <div className="col-md-6">
+              <p className="text-white-50 small mb-0">
+                © {new Date().getFullYear()} SwiftCV Builder. All rights reserved.
+              </p>
             </div>
-            <div className="footer-section">
-              <h4>Company</h4>
-              <a href="#">About</a>
-              <a href="#">Blog</a>
-              <a href="#">Careers</a>
-            </div>
-            <div className="footer-section">
-              <h4>Support</h4>
-              <a href="#">Help Center</a>
-              <a href="#">Contact</a>
-              <a href="#">Privacy</a>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p>&copy; 2024 SwiftCV. All rights reserved.</p>
-            <div className="footer-social">
-              <a href="#" className="social-link">Twitter</a>
-              <a href="#" className="social-link">LinkedIn</a>
-              <a href="#" className="social-link">Facebook</a>
+            <div className="col-md-6 text-md-end">
+              <p className="text-white-50 small mb-0">
+                Made with <i className="bi bi-heart-fill text-danger mx-1"></i> for your career success
+              </p>
             </div>
           </div>
         </div>

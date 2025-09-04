@@ -1,5 +1,4 @@
 import { useState, useEffect, Suspense, lazy } from "react"
-import { SkeletonTemplate } from "./ui/skeleton"
 
 // Lazy load templates for better performance
 const TemplateClassic = lazy(() => import("../templates/TemplateClassic"))
@@ -35,8 +34,8 @@ export default function CVPreview({ formData = {}, template = "classic" }) {
     return (
       <Suspense fallback={<SkeletonTemplate />}>
         <div className={`
-          transition-all duration-300 ease-out
-          ${isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}
+          transition-all
+          ${isTransitioning ? 'opacity-0' : 'opacity-100'}
         `}>
           <TemplateComponent data={formData} />
         </div>
@@ -45,25 +44,28 @@ export default function CVPreview({ formData = {}, template = "classic" }) {
   }
 
   return (
-    <div className="relative w-full">
+    <div className="position-relative w-100">
       {/* Template transition overlay */}
       {isTransitioning && (
-        <div className="absolute inset-0 z-10 bg-background/50 backdrop-blur-sm rounded-lg flex items-center justify-center">
-          <div className="flex items-center gap-3 text-muted-foreground">
-            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            <span className="text-sm font-medium">Switching template...</span>
+        <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75 rounded-3"
+             style={{zIndex: 10}}>
+          <div className="d-flex align-items-center gap-3 text-muted">
+            <div className="spinner-border spinner-border-sm text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <span className="fw-medium small">Switching template...</span>
           </div>
         </div>
       )}
 
       {/* Template content */}
-      <div className="relative z-0">
+      <div className="position-relative" style={{zIndex: 0}}>
         {renderTemplate(currentTemplate)}
       </div>
 
       {/* Template info overlay */}
-      <div className="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity duration-200">
-        <div className="bg-background/80 backdrop-blur-sm border border-border rounded-md px-2 py-1 text-xs text-muted-foreground">
+      <div className="position-absolute top-0 end-0 p-2 opacity-0 hover-opacity-100 transition-opacity">
+        <div className="bg-white bg-opacity-75 border rounded-2 px-2 py-1 small text-muted">
           {getTemplateName(currentTemplate)}
         </div>
       </div>
@@ -118,4 +120,38 @@ function getTemplateName(templateName) {
     banner: "Photo Banner"
   }
   return names[templateName] || "Unknown Template"
+}
+
+function SkeletonTemplate() {
+  return (
+    <div className="bg-white rounded-3 p-4 shadow-sm">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="bg-light rounded-circle placeholder-glow" style={{width: "64px", height: "64px"}}></div>
+        <div className="flex-grow-1">
+          <div className="placeholder-glow mb-2">
+            <div className="placeholder col-6"></div>
+          </div>
+          <div className="placeholder-glow">
+            <div className="placeholder col-4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="placeholder-glow mb-4">
+        <div className="placeholder col-12" style={{height: "60px"}}></div>
+      </div>
+
+      <div className="placeholder-glow mb-3">
+        <div className="placeholder col-4 mb-2"></div>
+        <div className="placeholder col-8 mb-2"></div>
+        <div className="placeholder col-6"></div>
+      </div>
+
+      <div className="placeholder-glow">
+        <div className="placeholder col-5 mb-2"></div>
+        <div className="placeholder col-9 mb-2"></div>
+        <div className="placeholder col-7"></div>
+      </div>
+    </div>
+  )
 }

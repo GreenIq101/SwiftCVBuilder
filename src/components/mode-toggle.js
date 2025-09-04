@@ -100,19 +100,16 @@ export default function ModeToggle() {
       aria-label={getLabel()}
       title={getLabel()}
       className={`
-        relative p-2 rounded-xl
-        bg-background/80 backdrop-blur-sm border border-border/50
-        hover:bg-accent/10 hover:border-border
-        text-foreground/80 hover:text-foreground
-        shadow-sm hover:shadow-md
-        transition-all duration-300 ease-out
-        hover:scale-105 active:scale-95
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+        btn btn-outline-secondary position-relative p-2 rounded-3 border
+        bg-white bg-opacity-75 shadow-sm
+        transition-all
+        hover-shadow hover-scale
+        focus-visible-ring
         ${isAnimating ? 'animate-pulse' : ''}
       `}
     >
       <div className={`
-        relative transition-transform duration-300 ease-out
+        transition-transform
         ${isAnimating ? 'rotate-180 scale-110' : 'rotate-0 scale-100'}
       `}>
         {getIcon()}
@@ -120,10 +117,10 @@ export default function ModeToggle() {
 
       {/* Subtle glow effect on hover */}
       <div className="
-        absolute inset-0 rounded-xl opacity-0
+        position-absolute top-0 start-0 w-100 h-100 rounded-3 opacity-0
         bg-gradient-to-br from-primary/10 via-transparent to-accent/10
-        transition-opacity duration-300
-        hover:opacity-100
+        transition-opacity
+        hover-opacity-100
         pointer-events-none
       " />
     </button>

@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "./ui/button"
 import { LogOut, User } from "lucide-react"
 import { signOutUser } from "../firebase"
 
@@ -9,25 +8,26 @@ export default function UserMenu({ user = null, onOpenManager = () => {} }) {
   const name = user.displayName || user.email || "Account"
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-muted">
+    <div className="d-flex align-items-center gap-2">
+      <div className="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill border bg-light">
         {user.photoURL ? (
           <img
             src={user.photoURL || "/placeholder.svg?height=24&width=24&query=user%20avatar"}
             alt="Avatar"
-            className="h-6 w-6 rounded-full object-cover"
+            className="rounded-circle object-cover"
+            style={{width: "24px", height: "24px"}}
           />
         ) : (
-          <User className="h-4 w-4" />
+          <User style={{width: "16px", height: "16px"}} />
         )}
-        <span className="text-sm">{name}</span>
+        <span className="small fw-medium">{name}</span>
       </div>
-      <Button variant="outline" onClick={onOpenManager}>
+      <button className="btn btn-outline-primary" onClick={onOpenManager}>
         My CVs
-      </Button>
-      <Button variant="outline" onClick={signOutUser} title="Sign out">
-        <LogOut className="h-4 w-4" />
-      </Button>
+      </button>
+      <button className="btn btn-outline-secondary" onClick={signOutUser} title="Sign out">
+        <LogOut style={{width: "16px", height: "16px"}} />
+      </button>
     </div>
   )
 }

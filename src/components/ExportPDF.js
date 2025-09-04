@@ -1,9 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "./ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
-import { Separator } from "./ui/separator"
 import {
   Download,
   FileText,
@@ -11,7 +8,6 @@ import {
   Settings,
   CheckCircle,
   AlertCircle,
-  Loader2,
   X
 } from "lucide-react"
 
@@ -152,203 +148,214 @@ export default function ExportPDF({
   }
 
   return (
-    <div className="fullscreen-overlay animate-in-fade">
-      <div className="fullscreen-toolbar">
-        <div className="toolbar-left">
-          <Button
-            variant="ghost"
-            onClick={onClose}
-            aria-label="Close export dialog"
-            className="btn-enhanced"
-          >
-            <X className="mr-2 h-4 w-4" />
-            Close
-          </Button>
-        </div>
+    <div className="modal fade show d-block" style={{backgroundColor: "rgba(0,0,0,0.5)"}} role="dialog">
+      <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div className="modal-content border-0 shadow-lg">
+          {/* Modal Header */}
+          <div className="modal-header bg-white border-0">
+            <h5 className="modal-title fw-bold d-flex align-items-center gap-2">
+              <Download style={{width: "20px", height: "20px"}} className="text-primary" />
+              Export Resume
+            </h5>
+            <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
+          </div>
 
-        <div className="toolbar-center">
-          <h2 className="text-lg font-semibold">Export Resume</h2>
-        </div>
+          {/* Modal Body */}
+          <div className="modal-body p-4">
+            <div className="row g-4">
+              {/* Format Selection */}
+              <div className="col-lg-4">
+                <div className="card card-modern h-100 border-0 shadow-sm">
+                  <div className="card-header bg-white border-0">
+                    <h6 className="card-title mb-0 fw-bold d-flex align-items-center gap-2">
+                      <FileText style={{width: "18px", height: "18px"}} className="text-primary" />
+                      Export Format
+                    </h6>
+                  </div>
+                  <div className="card-body">
+                    <div className="d-grid gap-3">
+                      {exportFormats.map((format) => {
+                        const Icon = format.icon
+                        return (
+                          <button
+                            key={format.value}
+                            onClick={() => setExportOptions({ ...exportOptions, format: format.value })}
+                            className={`btn border-2 rounded-3 p-3 text-start transition-all ${
+                              exportOptions.format === format.value
+                                ? 'border-primary bg-primary bg-opacity-10'
+                                : 'border-light hover-border-primary'
+                            }`}
+                          >
+                            <div className="d-flex align-items-center gap-3">
+                              <Icon style={{width: "24px", height: "24px"}} className="text-primary" />
+                              <div className="flex-grow-1">
+                                <div className="fw-semibold">{format.label}</div>
+                                <small className="text-muted">{format.description}</small>
+                              </div>
+                              {exportOptions.format === format.value && (
+                                <CheckCircle style={{width: "20px", height: "20px"}} className="text-primary" />
+                              )}
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        <div className="toolbar-right">
-          <Button
-            onClick={handleExport}
-            disabled={isExporting}
-            className="btn-enhanced primary-btn"
-          >
-            {isExporting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Exporting... {exportProgress}%
-              </>
-            ) : (
-              <>
-                <Download className="mr-2 h-4 w-4" />
-                Export {exportOptions.format.toUpperCase()}
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-
-      <div className="fullscreen-content">
-        <div className="export-grid animate-in-scale">
-          {/* Format Selection */}
-          <Card className="export-card">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2 text-heading-md">
-                <FileText className="h-5 w-5 text-primary" />
-                Export Format
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 gap-3">
-                {exportFormats.map((format) => {
-                  const Icon = format.icon
-                  return (
-                    <button
-                      key={format.value}
-                      onClick={() => setExportOptions({ ...exportOptions, format: format.value })}
-                      className={`p-4 rounded-lg border-2 transition-all text-left ${
-                        exportOptions.format === format.value
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon className="h-6 w-6 text-primary" />
-                        <div>
-                          <div className="font-medium">{format.label}</div>
-                          <div className="text-sm text-muted-foreground">{format.description}</div>
-                        </div>
-                        {exportOptions.format === format.value && (
-                          <CheckCircle className="h-5 w-5 text-primary ml-auto" />
-                        )}
+              {/* Quality Settings */}
+              <div className="col-lg-4">
+                <div className="card card-modern h-100 border-0 shadow-sm">
+                  <div className="card-header bg-white border-0">
+                    <h6 className="card-title mb-0 fw-bold d-flex align-items-center gap-2">
+                      <Settings style={{width: "18px", height: "18px"}} className="text-primary" />
+                      Quality Settings
+                    </h6>
+                  </div>
+                  <div className="card-body">
+                    <div className="mb-4">
+                      <label className="form-label fw-semibold small">Resolution Quality</label>
+                      <div className="d-flex gap-2">
+                        {qualityOptions.map((quality) => (
+                          <button
+                            key={quality.value}
+                            onClick={() => setExportOptions({ ...exportOptions, quality: quality.value })}
+                            className={`btn flex-fill border-2 rounded-3 transition-all ${
+                              exportOptions.quality === quality.value
+                                ? 'border-primary bg-primary bg-opacity-10'
+                                : 'border-light hover-border-primary'
+                            }`}
+                          >
+                            {quality.label}
+                          </button>
+                        ))}
                       </div>
-                    </button>
-                  )
-                })}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quality Settings */}
-          <Card className="export-card">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2 text-heading-md">
-                <Settings className="h-5 w-5 text-primary" />
-                Quality Settings
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <label className="text-sm font-medium mb-3 block">Resolution Quality</label>
-                <div className="flex gap-2">
-                  {qualityOptions.map((quality) => (
-                    <button
-                      key={quality.value}
-                      onClick={() => setExportOptions({ ...exportOptions, quality: quality.value })}
-                      className={`flex-1 p-3 rounded-lg border-2 transition-all ${
-                        exportOptions.quality === quality.value
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                    >
-                      {quality.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <Separator />
-
-              <div>
-                <label className="text-sm font-medium mb-3 block">Page Size</label>
-                <div className="space-y-2">
-                  {pageSizes.map((size) => (
-                    <button
-                      key={size.value}
-                      onClick={() => setExportOptions({ ...exportOptions, pageSize: size.value })}
-                      className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                        exportOptions.pageSize === size.value
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                    >
-                      <div className="font-medium">{size.label}</div>
-                      <div className="text-sm text-muted-foreground">{size.dimensions}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <Separator />
-
-              <div>
-                <label className="text-sm font-medium mb-3 block">Margins</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {marginOptions.map((margin) => (
-                    <button
-                      key={margin.value}
-                      onClick={() => setExportOptions({ ...exportOptions, margins: margin.value })}
-                      className={`p-3 rounded-lg border-2 transition-all ${
-                        exportOptions.margins === margin.value
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                    >
-                      {margin.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Preview & Options */}
-          <Card className="export-card">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2 text-heading-md">
-                <CheckCircle className="h-5 w-5 text-primary" />
-                Export Preview
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="export-summary p-4 bg-muted/50 rounded-lg">
-                  <h4 className="font-medium mb-2">Export Summary</h4>
-                  <div className="space-y-1 text-sm">
-                    <div className="flex justify-between">
-                      <span>Format:</span>
-                      <span className="font-medium">{exportOptions.format.toUpperCase()}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Quality:</span>
-                      <span className="font-medium">{exportOptions.quality}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Page Size:</span>
-                      <span className="font-medium">{exportOptions.pageSize}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Margins:</span>
-                      <span className="font-medium">{exportOptions.margins}</span>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="flex items-start gap-2 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                  <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <div className="text-sm">
-                    <div className="font-medium text-blue-900 dark:text-blue-100">Export Tips</div>
-                    <div className="text-blue-700 dark:text-blue-300 mt-1">
-                      High quality recommended for printing. PDF format preserves formatting best.
+                    <hr />
+
+                    <div className="mb-4">
+                      <label className="form-label fw-semibold small">Page Size</label>
+                      <div className="d-grid gap-2">
+                        {pageSizes.map((size) => (
+                          <button
+                            key={size.value}
+                            onClick={() => setExportOptions({ ...exportOptions, pageSize: size.value })}
+                            className={`btn border-2 rounded-3 p-3 text-start transition-all ${
+                              exportOptions.pageSize === size.value
+                                ? 'border-primary bg-primary bg-opacity-10'
+                                : 'border-light hover-border-primary'
+                            }`}
+                          >
+                            <div className="fw-semibold">{size.label}</div>
+                            <small className="text-muted">{size.dimensions}</small>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <hr />
+
+                    <div>
+                      <label className="form-label fw-semibold small">Margins</label>
+                      <div className="row g-2">
+                        {marginOptions.map((margin) => (
+                          <div key={margin.value} className="col-6">
+                            <button
+                              onClick={() => setExportOptions({ ...exportOptions, margins: margin.value })}
+                              className={`btn w-100 border-2 rounded-3 transition-all ${
+                                exportOptions.margins === margin.value
+                                  ? 'border-primary bg-primary bg-opacity-10'
+                                  : 'border-light hover-border-primary'
+                              }`}
+                            >
+                              {margin.label}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+
+              {/* Preview & Options */}
+              <div className="col-lg-4">
+                <div className="card card-modern h-100 border-0 shadow-sm">
+                  <div className="card-header bg-white border-0">
+                    <h6 className="card-title mb-0 fw-bold d-flex align-items-center gap-2">
+                      <CheckCircle style={{width: "18px", height: "18px"}} className="text-primary" />
+                      Export Preview
+                    </h6>
+                  </div>
+                  <div className="card-body">
+                    <div className="bg-light bg-opacity-50 rounded-3 p-3 mb-4">
+                      <h6 className="fw-semibold mb-3">Export Summary</h6>
+                      <div className="small">
+                        <div className="d-flex justify-content-between mb-2">
+                          <span>Format:</span>
+                          <span className="fw-semibold">{exportOptions.format.toUpperCase()}</span>
+                        </div>
+                        <div className="d-flex justify-content-between mb-2">
+                          <span>Quality:</span>
+                          <span className="fw-semibold">{exportOptions.quality}</span>
+                        </div>
+                        <div className="d-flex justify-content-between mb-2">
+                          <span>Page Size:</span>
+                          <span className="fw-semibold">{exportOptions.pageSize}</span>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                          <span>Margins:</span>
+                          <span className="fw-semibold">{exportOptions.margins}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-info bg-opacity-10 border border-info rounded-3 p-3">
+                      <div className="d-flex gap-2">
+                        <AlertCircle style={{width: "16px", height: "16px"}} className="text-info flex-shrink-0 mt-1" />
+                        <div className="small">
+                          <div className="fw-semibold text-info mb-1">Export Tips</div>
+                          <div className="text-info">
+                            High quality recommended for printing. PDF format preserves formatting best.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Footer */}
+          <div className="modal-footer border-0 bg-light">
+            <button type="button" className="btn btn-outline-secondary" onClick={onClose}>
+              <X style={{width: "16px", height: "16px"}} className="me-2" />
+              Close
+            </button>
+            <button
+              type="button"
+              className="btn btn-gradient"
+              onClick={handleExport}
+              disabled={isExporting}
+            >
+              {isExporting ? (
+                <>
+                  <div className="spinner-border spinner-border-sm me-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  Exporting... {exportProgress}%
+                </>
+              ) : (
+                <>
+                  <Download style={{width: "16px", height: "16px"}} className="me-2" />
+                  Export {exportOptions.format.toUpperCase()}
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

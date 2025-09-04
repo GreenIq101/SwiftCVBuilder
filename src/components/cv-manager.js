@@ -1,18 +1,21 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
-import { Separator } from "./ui/separator"
 import { Trash2, FilePlus2, Save, Download, FolderOpenDot, Pencil } from "lucide-react"
 import { listenResumes, createResume, updateResume, deleteResume, getResume } from "../firebase"
 
 const ConfirmationDialog = ({ message, onConfirm, onCancel }) => (
-  <div className="confirmation-dialog">
-    <p>{message}</p>
-    <div className="flex gap-2">
-      <Button onClick={onConfirm}>Yes</Button>
-      <Button variant="outline" onClick={onCancel}>No</Button>
+  <div className="modal fade show d-block" style={{backgroundColor: "rgba(0,0,0,0.5)"}} role="dialog">
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content">
+        <div className="modal-body text-center p-4">
+          <p className="mb-4">{message}</p>
+          <div className="d-flex gap-2 justify-content-center">
+            <button className="btn btn-primary" onClick={onConfirm}>Yes</button>
+            <button className="btn btn-outline-secondary" onClick={onCancel}>No</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 )
@@ -144,60 +147,79 @@ export default function CVManager({
           onCancel={confirmDialog.onCancel}
         />
       )}
-      <div className="overlay" role="dialog" aria-modal="true" aria-label="Manage CVs">
-        <div className="overlay-toolbar">
-          <Button variant="outline" onClick={onClose}>
-            Close
-          </Button>
-        </div>
-        <div className="overlay-content">
-          <div className="overlay-surface" style={{ maxWidth: 960 }}>
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-lg font-semibold">Your CVs</h2>
-              <div className="flex gap-2">
-                <Button onClick={onNew} disabled={busy}>
-                  <FilePlus2 className="h-4 w-4 mr-2" />
-                  New
-                </Button>
-                <Button onClick={onSave} disabled={busy}>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save
-                </Button>
-                <Button variant="outline" onClick={onSaveAs} disabled={busy}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Save As
-                </Button>
-              </div>
+      <div className="modal fade show d-block" style={{backgroundColor: "rgba(0,0,0,0.5)"}} role="dialog" aria-modal="true" aria-label="Manage CVs">
+        <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <div className="modal-content border-0 shadow-lg">
+            {/* Modal Header */}
+            <div className="modal-header bg-white border-0">
+              <h5 className="modal-title fw-bold">Your CVs</h5>
+              <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
             </div>
 
-            <Separator className="my-3" />
-
-            <div className="flex items-center gap-2 mb-3">
-              <Input placeholder="Filter by name..." value={filter} onChange={(e) => setFilter(e.target.value)} />
-            </div>
-
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {filtered.map((r) => (
-                <div key={r.id} className="rounded-md border p-3 elevated">
-                  <div className="font-medium text-sm">{r.name || "Untitled"}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {r.template || "classic"} {currentResumeId === r.id ? " • current" : ""}
-                  </div>
-                  <div className="flex gap-2 mt-3">
-                    <Button className="flex-1" onClick={() => onLoad(r.id)} disabled={busy}>
-                      <FolderOpenDot className="h-4 w-4 mr-2" />
-                      Load
-                    </Button>
-                    <Button variant="outline" onClick={() => onRename(r.id, r.name)} disabled={busy} title="Rename">
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button variant="destructive" onClick={() => handleDeleteResume(r.id)} disabled={busy} title="Delete">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+            {/* Modal Body */}
+            <div className="modal-body p-4">
+              <div className="d-flex justify-content-between align-items-center gap-2 mb-4">
+                <div className="d-flex gap-2">
+                  <button className="btn btn-primary" onClick={onNew} disabled={busy}>
+                    <FilePlus2 style={{width: "16px", height: "16px"}} className="me-2" />
+                    New
+                  </button>
+                  <button className="btn btn-success" onClick={onSave} disabled={busy}>
+                    <Save style={{width: "16px", height: "16px"}} className="me-2" />
+                    Save
+                  </button>
+                  <button className="btn btn-outline-primary" onClick={onSaveAs} disabled={busy}>
+                    <Download style={{width: "16px", height: "16px"}} className="me-2" />
+                    Save As
+                  </button>
                 </div>
-              ))}
-              {!filtered.length ? <p className="text-sm text-muted-foreground">No resumes yet.</p> : null}
+              </div>
+
+              <hr />
+
+              <div className="mb-4">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by name..."
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                />
+              </div>
+
+              <div className="row g-3">
+                {filtered.map((r) => (
+                  <div key={r.id} className="col-md-6 col-lg-4">
+                    <div className="card card-modern h-100 border-0 shadow-sm">
+                      <div className="card-body p-3">
+                        <h6 className="card-title fw-semibold mb-1">{r.name || "Untitled"}</h6>
+                        <p className="card-text small text-muted mb-3">
+                          {r.template || "classic"} {currentResumeId === r.id ? " • current" : ""}
+                        </p>
+                        <div className="d-flex gap-2">
+                          <button className="btn btn-primary flex-fill" onClick={() => onLoad(r.id)} disabled={busy}>
+                            <FolderOpenDot style={{width: "14px", height: "14px"}} className="me-1" />
+                            Load
+                          </button>
+                          <button className="btn btn-outline-secondary" onClick={() => onRename(r.id, r.name)} disabled={busy} title="Rename">
+                            <Pencil style={{width: "14px", height: "14px"}} />
+                          </button>
+                          <button className="btn btn-outline-danger" onClick={() => handleDeleteResume(r.id)} disabled={busy} title="Delete">
+                            <Trash2 style={{width: "14px", height: "14px"}} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {!filtered.length && (
+                  <div className="col-12">
+                    <div className="text-center py-5 text-muted">
+                      <p className="mb-0">No resumes yet.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

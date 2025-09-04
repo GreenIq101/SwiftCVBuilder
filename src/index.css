@@ -1367,7 +1367,7 @@ html {
   height: 2rem;
   width: 2rem;
   border-radius: 0.5rem;
-  background: var(--gradient-primary);
+  /* background: var(--gradient-primary); */
   padding: 0.25rem;
 }
 
@@ -1384,7 +1384,10 @@ html {
 }
 
 .nav-link {
-  color: hsl(var(--muted-foreground));
+  /* color: hsl(var(--muted-foreground)); */
+  color: dodgerblue;
+  background-color: transparent;
+  border: none;
   font-weight: 500;
   transition: color 0.2s ease;
   cursor: pointer;
@@ -1557,6 +1560,7 @@ html {
 /* Hero Visual */
 .hero-visual {
   display: flex;
+  padding: 10%;
   justify-content: center;
   align-items: center;
 }
@@ -1572,8 +1576,8 @@ html {
 }
 
 .mockup-screen {
-  width: 300px;
-  height: 200px;
+  width: 400px;
+  height: 300px;
   background: white;
   border-radius: 1rem;
   box-shadow: var(--shadow-2xl);
@@ -2046,7 +2050,7 @@ html {
   height: 2rem;
   width: 2rem;
   border-radius: 0.5rem;
-  background: var(--gradient-primary);
+  /* background: var(--gradient-primary); */
   padding: 0.25rem;
 }
 
@@ -2380,7 +2384,7 @@ html {
   height: 4rem;
   width: 4rem;
   border-radius: 1rem;
-  background: var(--gradient-primary);
+  /* background: var(--gradient-primary); */
   padding: 0.75rem;
   margin-bottom: 1rem;
   box-shadow: var(--shadow-xl);
@@ -2471,6 +2475,7 @@ html {
   max-width: 400px;
   box-shadow: var(--shadow-2xl);
   backdrop-filter: blur(10px);
+  
 }
 
 .auth-form-header {
@@ -3200,6 +3205,7 @@ section {
   gap: 0.5rem;
   padding: 0.25rem 0.75rem;
   background: hsl(var(--muted));
+  /* background-color: #10b981; */
   border-radius: 9999px;
   font-size: 0.875rem;
 }
@@ -5119,7 +5125,7 @@ footer {
 .label { font-weight:600; color:#333; display:block; margin-bottom:6px; }
 
 /* tabs */
-.auth-tabs { display:flex; gap:8px; background: rgba(0,0,0,0.03); padding:6px; border-radius:12px; }
+.auth-tabs { display:flex; gap:8px; background: rgba(0,0,0,0.03); padding:6px; border-radius:12px; flex-direction: column; }
 .tab-trigger { padding:10px 16px; border-radius:10px; background:transparent; color:#444; font-weight:700; }
 .tab-trigger[data-state="active"] { background:#fff; color:#e40e5a; box-shadow: 0 8px 18px rgba(0,0,0,0.08); }
 

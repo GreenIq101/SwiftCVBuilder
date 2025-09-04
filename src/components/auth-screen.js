@@ -1,11 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
-import { Separator } from "./ui/separator"
-import { ChromeIcon as Google, LogIn, UserPlus, Sparkles, ArrowRight, CheckCircle, FileText, Users, Award } from "lucide-react"
 import { signInWithGooglePopup, signInWithEmail, signUpWithEmail } from "../firebase"
 
 // Use logo from src/Img folder directly
@@ -34,206 +29,260 @@ export default function AuthScreen() {
   }
 
   const features = [
-    { icon: <FileText className="h-5 w-5" />, text: "12+ Professional Templates" },
-    { icon: <Users className="h-5 w-5" />, text: "50K+ Happy Users" },
-    { icon: <Award className="h-5 w-5" />, text: "95% ATS Success Rate" }
+    { icon: "bi-file-earmark-text", text: "12+ Professional Templates" },
+    { icon: "bi-people", text: "50K+ Happy Users" },
+    { icon: "bi-trophy", text: "95% ATS Success Rate" }
   ]
 
   return (
-    <div className="modern-auth">
-      {/* Background Elements */}
-      <div className="auth-bg-elements">
-        <div className="bg-element element-1"></div>
-        <div className="bg-element element-2"></div>
-        <div className="bg-element element-3"></div>
-      </div>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-pattern">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-10">
+            <div className="card glass-card border-0 shadow-glow overflow-hidden">
+              <div className="row g-0">
+                {/* Left Side - Branding */}
+                <div className="col-lg-6 d-none d-lg-block">
+                  <div className="auth-branding p-5 h-100 d-flex flex-column justify-content-center">
+                    <div className="text-center mb-5">
+                      <img src={LOGO_PATH} alt="SwiftCV Logo" className="mb-3" style={{height: "80px", width: "80px"}} />
+                      <h2 className="display-6 fw-bold gradient-text mb-2">SwiftCV Builder</h2>
+                      <p className="text-muted">Professional Resume Builder</p>
+                    </div>
 
-      <div className="auth-container">
-        {/* Left Side - Branding */}
-        <div className="auth-branding">
-          <div className="branding-content">
-            <div className="brand-header">
-              <img src={LOGO_PATH} alt="SwiftCV Logo" className="brand-logo" />
-              <h1 className="brand-title">SwiftCV</h1>
-              <p className="brand-subtitle">Professional Resume Builder</p>
-            </div>
+                    <div className="mb-5">
+                      {features.map((feature, index) => (
+                        <div key={index} className="d-flex align-items-center mb-3">
+                          <div className="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                            <i className={`bi ${feature.icon} text-primary fs-5`}></i>
+                          </div>
+                          <span className="fw-medium">{feature.text}</span>
+                        </div>
+                      ))}
+                    </div>
 
-            <div className="brand-features">
-              {features.map((feature, index) => (
-                <div key={index} className="feature-item">
-                  <div className="feature-icon">
-                    {feature.icon}
+                    <div className="bg-light bg-opacity-10 p-4 rounded-4">
+                      <blockquote className="blockquote mb-3">
+                        <p className="fst-italic text-white-50">"SwiftCV helped me land my dream job in just 2 weeks!"</p>
+                      </blockquote>
+                      <footer className="blockquote-footer text-white-50">
+                        Sarah Johnson, Senior Developer
+                      </footer>
+                    </div>
                   </div>
-                  <span className="feature-text">{feature.text}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="brand-quote">
-              <blockquote>
-                "SwiftCV helped me land my dream job in just 2 weeks!"
-              </blockquote>
-              <cite>- Sarah Johnson, Senior Developer</cite>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side - Auth Form */}
-        <div className="auth-form-container">
-          <div className="auth-form-card">
-            <div className="auth-form-header">
-              <h2 className="auth-form-title">
-                {activeTab === "signin" ? "Welcome back" : "Create your account"}
-              </h2>
-              <p className="auth-form-subtitle">
-                {activeTab === "signin"
-                  ? "Sign in to continue building amazing resumes"
-                  : "Join thousands of professionals who've transformed their careers"
-                }
-              </p>
-            </div>
-
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="auth-tabs">
-              <TabsList className="auth-tab-list">
-                <TabsTrigger value="signin" className="auth-tab">Sign in</TabsTrigger>
-                <TabsTrigger value="signup" className="auth-tab">Sign up</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="signin" className="auth-tab-content">
-                <form className="auth-form" onSubmit={(e) => {
-                  e.preventDefault()
-                  withBusy(() => signInWithEmail(emailIn, passIn))
-                }}>
-                  <div className="form-group">
-                    <label className="form-label">Email address</label>
-                    <Input
-                      type="email"
-                      value={emailIn}
-                      onChange={(e) => setEmailIn(e.target.value)}
-                      placeholder="Enter your email"
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Password</label>
-                    <Input
-                      type="password"
-                      value={passIn}
-                      onChange={(e) => setPassIn(e.target.value)}
-                      placeholder="Enter your password"
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="auth-submit-btn"
-                    disabled={busy}
-                  >
-                    {busy ? "Signing in..." : "Continue"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </form>
-
-                <div className="auth-divider">
-                  <span className="divider-text">or continue with</span>
                 </div>
 
-                <Button
-                  variant="outline"
-                  className="auth-google-btn"
-                  disabled={busy}
-                  onClick={() => withBusy(signInWithGooglePopup)}
-                >
-                  <Google className="mr-2 h-5 w-5" />
-                  Google
-                </Button>
-              </TabsContent>
+                {/* Right Side - Auth Form */}
+                <div className="col-lg-6">
+                  <div className="p-5">
+                    {/* Tab Navigation */}
+                    <ul className="nav nav-pills nav-fill mb-4" id="authTabs" role="tablist">
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${activeTab === 'signin' ? 'active' : ''} fw-bold`}
+                          onClick={() => setActiveTab('signin')}
+                          type="button"
+                          role="tab"
+                        >
+                          <i className="bi bi-box-arrow-in-right me-2"></i>
+                          Sign In
+                        </button>
+                      </li>
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${activeTab === 'signup' ? 'active' : ''} fw-bold`}
+                          onClick={() => setActiveTab('signup')}
+                          type="button"
+                          role="tab"
+                        >
+                          <i className="bi bi-person-plus me-2"></i>
+                          Sign Up
+                        </button>
+                      </li>
+                    </ul>
 
-              <TabsContent value="signup" className="auth-tab-content">
-                <form className="auth-form" onSubmit={(e) => {
-                  e.preventDefault()
-                  withBusy(() => signUpWithEmail(emailUp, passUp, nameUp))
-                }}>
-                  <div className="form-group">
-                    <label className="form-label">Full name</label>
-                    <Input
-                      type="text"
-                      value={nameUp}
-                      onChange={(e) => setNameUp(e.target.value)}
-                      placeholder="Enter your full name"
-                      className="form-input"
-                      required
-                    />
+                    {/* Tab Content */}
+                    <div className="tab-content">
+                      {/* Sign In Tab */}
+                      {activeTab === 'signin' && (
+                        <div className="tab-pane fade show active">
+                          <div className="text-center mb-4">
+                            <h3 className="fw-bold mb-2">Welcome Back!</h3>
+                            <p className="text-muted">Sign in to continue building amazing resumes</p>
+                          </div>
+
+                          <form onSubmit={(e) => {
+                            e.preventDefault()
+                            withBusy(() => signInWithEmail(emailIn, passIn))
+                          }}>
+                            <div className="mb-3">
+                              <label htmlFor="signinEmail" className="form-label fw-semibold">Email Address</label>
+                              <input
+                                type="email"
+                                className="form-control form-control-modern"
+                                id="signinEmail"
+                                value={emailIn}
+                                onChange={(e) => setEmailIn(e.target.value)}
+                                placeholder="Enter your email"
+                                required
+                              />
+                            </div>
+
+                            <div className="mb-4">
+                              <label htmlFor="signinPassword" className="form-label fw-semibold">Password</label>
+                              <input
+                                type="password"
+                                className="form-control form-control-modern"
+                                id="signinPassword"
+                                value={passIn}
+                                onChange={(e) => setPassIn(e.target.value)}
+                                placeholder="Enter your password"
+                                required
+                              />
+                            </div>
+
+                            <button
+                              type="submit"
+                              className="btn btn-gradient w-100 mb-3"
+                              disabled={busy}
+                            >
+                              {busy ? (
+                                <>
+                                  <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                  Signing in...
+                                </>
+                              ) : (
+                                <>
+                                  <i className="bi bi-arrow-right me-2"></i>
+                                  Continue
+                                </>
+                              )}
+                            </button>
+                          </form>
+
+                          <div className="text-center mb-3">
+                            <span className="text-muted">or continue with</span>
+                          </div>
+
+                          <button
+                            type="button"
+                            className="btn btn-outline-primary w-100 mb-4"
+                            disabled={busy}
+                            onClick={() => withBusy(signInWithGooglePopup)}
+                          >
+                            <i className="bi bi-google me-2"></i>
+                            Continue with Google
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Sign Up Tab */}
+                      {activeTab === 'signup' && (
+                        <div className="tab-pane fade show active">
+                          <div className="text-center mb-4">
+                            <h3 className="fw-bold mb-2">Create Your Account</h3>
+                            <p className="text-muted">Join thousands of professionals who've transformed their careers</p>
+                          </div>
+
+                          <form onSubmit={(e) => {
+                            e.preventDefault()
+                            withBusy(() => signUpWithEmail(emailUp, passUp, nameUp))
+                          }}>
+                            <div className="mb-3">
+                              <label htmlFor="signupName" className="form-label fw-semibold">Full Name</label>
+                              <input
+                                type="text"
+                                className="form-control form-control-modern"
+                                id="signupName"
+                                value={nameUp}
+                                onChange={(e) => setNameUp(e.target.value)}
+                                placeholder="Enter your full name"
+                                required
+                              />
+                            </div>
+
+                            <div className="mb-3">
+                              <label htmlFor="signupEmail" className="form-label fw-semibold">Email Address</label>
+                              <input
+                                type="email"
+                                className="form-control form-control-modern"
+                                id="signupEmail"
+                                value={emailUp}
+                                onChange={(e) => setEmailUp(e.target.value)}
+                                placeholder="Enter your email"
+                                required
+                              />
+                            </div>
+
+                            <div className="mb-4">
+                              <label htmlFor="signupPassword" className="form-label fw-semibold">Password</label>
+                              <input
+                                type="password"
+                                className="form-control form-control-modern"
+                                id="signupPassword"
+                                value={passUp}
+                                onChange={(e) => setPassUp(e.target.value)}
+                                placeholder="Create a password"
+                                required
+                              />
+                            </div>
+
+                            <button
+                              type="submit"
+                              className="btn btn-gradient w-100 mb-3"
+                              disabled={busy}
+                            >
+                              {busy ? (
+                                <>
+                                  <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                  Creating account...
+                                </>
+                              ) : (
+                                <>
+                                  <i className="bi bi-person-plus me-2"></i>
+                                  Create Account
+                                </>
+                              )}
+                            </button>
+                          </form>
+
+                          <div className="text-center mb-3">
+                            <span className="text-muted">or continue with</span>
+                          </div>
+
+                          <button
+                            type="button"
+                            className="btn btn-outline-primary w-100 mb-4"
+                            disabled={busy}
+                            onClick={() => withBusy(signInWithGooglePopup)}
+                          >
+                            <i className="bi bi-google me-2"></i>
+                            Continue with Google
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Error Message */}
+                    {error && (
+                      <div className="alert alert-danger d-flex align-items-center" role="alert">
+                        <i className="bi bi-exclamation-triangle me-2"></i>
+                        <div>{error}</div>
+                      </div>
+                    )}
+
+                    {/* Footer */}
+                    <div className="text-center mt-4">
+                      <small className="text-muted">
+                        By continuing, you agree to our{" "}
+                        <a href="#" className="text-decoration-none">Terms of Service</a>{" "}
+                        and{" "}
+                        <a href="#" className="text-decoration-none">Privacy Policy</a>
+                      </small>
+                    </div>
                   </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Email address</label>
-                    <Input
-                      type="email"
-                      value={emailUp}
-                      onChange={(e) => setEmailUp(e.target.value)}
-                      placeholder="Enter your email"
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label className="form-label">Password</label>
-                    <Input
-                      type="password"
-                      value={passUp}
-                      onChange={(e) => setPassUp(e.target.value)}
-                      placeholder="Create a password"
-                      className="form-input"
-                      required
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="auth-submit-btn"
-                    disabled={busy}
-                  >
-                    {busy ? "Creating account..." : "Create account"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </form>
-
-                <div className="auth-divider">
-                  <span className="divider-text">or continue with</span>
                 </div>
-
-                <Button
-                  variant="outline"
-                  className="auth-google-btn"
-                  disabled={busy}
-                  onClick={() => withBusy(signInWithGooglePopup)}
-                >
-                  <Google className="mr-2 h-5 w-5" />
-                  Google
-                </Button>
-              </TabsContent>
-            </Tabs>
-
-            {error && (
-              <div className="auth-error">
-                <div className="error-icon">⚠️</div>
-                <span className="error-message">{error}</span>
               </div>
-            )}
-
-            <div className="auth-footer">
-              <p className="auth-footer-text">
-                By continuing, you agree to our{" "}
-                <a href="#" className="auth-link">Terms of Service</a>{" "}
-                and{" "}
-                <a href="#" className="auth-link">Privacy Policy</a>
-              </p>
             </div>
           </div>
         </div>
