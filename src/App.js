@@ -332,7 +332,7 @@ export default function App() {
                 <button type="button" className="btn-close" onClick={() => setShowManager(false)} aria-label="Close"></button>
               </div>
               <div className="modal-body p-0">
-                <AuthScreen />
+                <AuthScreen onBack={() => setShowManager(false)} />
               </div>
             </div>
           </div>

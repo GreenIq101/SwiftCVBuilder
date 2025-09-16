@@ -1,2 +1,2 @@
-export const LOGO_PATH = "/Img/Fiveicon.png";
+export const LOGO_PATH = require("./Img/logo.png");
 

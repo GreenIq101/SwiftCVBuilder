@@ -6,7 +6,7 @@ import { signInWithGooglePopup, signInWithEmail, signUpWithEmail } from "../fire
 // Use logo from src/Img folder directly
 const LOGO_PATH = require("../Img/logo.png")
 
-export default function AuthScreen() {
+export default function AuthScreen({ onBack }) {
   const [emailIn, setEmailIn] = useState("")
   const [passIn, setPassIn] = useState("")
   const [emailUp, setEmailUp] = useState("")
@@ -47,7 +47,7 @@ export default function AuthScreen() {
                     <div className="text-center mb-5">
                       <img src={LOGO_PATH} alt="SwiftCV Logo" className="mb-3" style={{height: "80px", width: "80px"}} />
                       <h2 className="display-6 fw-bold gradient-text mb-2">SwiftCV Builder</h2>
-                      <p className="text-muted">Professional Resume Builder</p>
+                      <p className="text-light">Professional Resume Builder</p>
                     </div>
 
                     <div className="mb-5">
@@ -56,16 +56,16 @@ export default function AuthScreen() {
                           <div className="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
                             <i className={`bi ${feature.icon} text-primary fs-5`}></i>
                           </div>
-                          <span className="fw-medium">{feature.text}</span>
+                          <span className="fw-medium text-light">{feature.text}</span>
                         </div>
                       ))}
                     </div>
 
                     <div className="bg-light bg-opacity-10 p-4 rounded-4">
                       <blockquote className="blockquote mb-3">
-                        <p className="fst-italic text-white-50">"SwiftCV helped me land my dream job in just 2 weeks!"</p>
+                        <p className="fst-italic text-light">"SwiftCV helped me land my dream job in just 2 weeks!"</p>
                       </blockquote>
-                      <footer className="blockquote-footer text-white-50">
+                      <footer className="blockquote-footer text-light">
                         Sarah Johnson, Senior Developer
                       </footer>
                     </div>
@@ -74,7 +74,31 @@ export default function AuthScreen() {
 
                 {/* Right Side - Auth Form */}
                 <div className="col-lg-6">
-                  <div className="p-5">
+                  <div className="p-5 text-dark">
+                    {/* Back Button - Top of Form */}
+                    {onBack && (
+                      <div className="mb-4 d-flex justify-content-start">
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-lg d-flex align-items-center shadow-sm"
+                          onClick={onBack}
+                          style={{
+                            borderRadius: '25px',
+                            padding: '12px 24px',
+                            fontSize: '1.1rem',
+                            fontWeight: '600',
+                            border: '2px solid #dc3545',
+                            backgroundColor: '#dc3545',
+                            color: 'white',
+                            transition: 'all 0.3s ease'
+                          }}
+                        >
+                          <i className="bi bi-arrow-left me-2 fs-5"></i>
+                          <span>Back to Landing Page</span>
+                        </button>
+                      </div>
+                    )}
+
                     {/* Tab Navigation */}
                     <ul className="nav nav-pills nav-fill mb-4" id="authTabs" role="tablist">
                       <li className="nav-item" role="presentation">
@@ -107,7 +131,7 @@ export default function AuthScreen() {
                       {activeTab === 'signin' && (
                         <div className="tab-pane fade show active">
                           <div className="text-center mb-4">
-                            <h3 className="fw-bold mb-2">Welcome Back!</h3>
+                            <h3 className="fw-bold mb-2 font-color text-light " > Welcome Back!</h3>
                             <p className="text-muted">Sign in to continue building amazing resumes</p>
                           </div>
 
@@ -116,7 +140,7 @@ export default function AuthScreen() {
                             withBusy(() => signInWithEmail(emailIn, passIn))
                           }}>
                             <div className="mb-3">
-                              <label htmlFor="signinEmail" className="form-label fw-semibold">Email Address</label>
+                              <label htmlFor="signinEmail" className="form-label fw-semibold text-light">Email Address</label>
                               <input
                                 type="email"
                                 className="form-control form-control-modern"
@@ -129,7 +153,7 @@ export default function AuthScreen() {
                             </div>
 
                             <div className="mb-4">
-                              <label htmlFor="signinPassword" className="form-label fw-semibold">Password</label>
+                              <label htmlFor="signinPassword" className="form-label fw-semibold text-light">Password</label>
                               <input
                                 type="password"
                                 className="form-control form-control-modern"
@@ -161,7 +185,7 @@ export default function AuthScreen() {
                           </form>
 
                           <div className="text-center mb-3">
-                            <span className="text-muted">or continue with</span>
+                            <span className="text-light">or continue with</span>
                           </div>
 
                           <button
@@ -180,8 +204,8 @@ export default function AuthScreen() {
                       {activeTab === 'signup' && (
                         <div className="tab-pane fade show active">
                           <div className="text-center mb-4">
-                            <h3 className="fw-bold mb-2">Create Your Account</h3>
-                            <p className="text-muted">Join thousands of professionals who've transformed their careers</p>
+                            <h3 className="fw-bold mb-2 text-light ">Create Your Account</h3>
+                            <p className="text-light">Join thousands of professionals who've transformed their careers</p>
                           </div>
 
                           <form onSubmit={(e) => {
@@ -189,7 +213,7 @@ export default function AuthScreen() {
                             withBusy(() => signUpWithEmail(emailUp, passUp, nameUp))
                           }}>
                             <div className="mb-3">
-                              <label htmlFor="signupName" className="form-label fw-semibold">Full Name</label>
+                              <label htmlFor="signupName" className="form-label fw-semibold text-light">Full Name</label>
                               <input
                                 type="text"
                                 className="form-control form-control-modern"
@@ -202,7 +226,7 @@ export default function AuthScreen() {
                             </div>
 
                             <div className="mb-3">
-                              <label htmlFor="signupEmail" className="form-label fw-semibold">Email Address</label>
+                              <label htmlFor="signupEmail" className="form-label fw-semibold text-light">Email Address</label>
                               <input
                                 type="email"
                                 className="form-control form-control-modern"
@@ -215,7 +239,7 @@ export default function AuthScreen() {
                             </div>
 
                             <div className="mb-4">
-                              <label htmlFor="signupPassword" className="form-label fw-semibold">Password</label>
+                              <label htmlFor="signupPassword" className="form-label fw-semibold text-light">Password</label>
                               <input
                                 type="password"
                                 className="form-control form-control-modern"
@@ -247,7 +271,7 @@ export default function AuthScreen() {
                           </form>
 
                           <div className="text-center mb-3">
-                            <span className="text-muted">or continue with</span>
+                            <span className="text-light">or continue with</span>
                           </div>
 
                           <button
@@ -273,7 +297,7 @@ export default function AuthScreen() {
 
                     {/* Footer */}
                     <div className="text-center mt-4">
-                      <small className="text-muted">
+                      <small className="text-light">
                         By continuing, you agree to our{" "}
                         <a href="#" className="text-decoration-none">Terms of Service</a>{" "}
                         and{" "}

@@ -2,15 +2,15 @@ import React from "react";
 
 function Template1({ data }) {
   return (
-    <div style={{ border: "1px solid black", padding: "10px" }}>
-      <h1>{data.name}</h1>
-      <p>{data.email} | {data.phone}</p>
-      <h3>Education</h3>
-      <p>{data.education}</p>
-      <h3>Experience</h3>
-      <p>{data.experience}</p>
-      <h3>Skills</h3>
-      <p>{data.skills}</p>
+    <div className="border p-3">
+      <h1 className="h3 mb-2">{data.name || "Your Name"}</h1>
+      <p className="text-muted mb-3">{data.email || "Email"} | {data.phone || "Phone"}</p>
+      <h3 className="h5 mb-2">Education</h3>
+      <p className="mb-3">{data.education || "Add your education"}</p>
+      <h3 className="h5 mb-2">Experience</h3>
+      <p className="mb-3">{data.experience || "Add your experience"}</p>
+      <h3 className="h5 mb-2">Skills</h3>
+      <p className="mb-0">{data.skills || "Add your skills"}</p>
     </div>
   );
 }

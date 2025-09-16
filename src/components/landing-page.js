@@ -69,7 +69,7 @@ export default function LandingPage() {
                 Build Your CV <span className="gradient-text">Faster</span> & <span className="gradient-text">Better</span>
               </h1>
 
-              <p className="hero-subtitle lead text-white-50 mb-5">
+              <p className="hero-subtitle lead text-white mb-5">
                 SwiftCV Builder helps you create a modern, professional resume in minutes.
                 Choose from beautiful templates, preview live, and export instantly.
                 <span className="fw-bold text-warning"> No signup required for basic use!</span>
@@ -86,7 +86,7 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              <div className="row g-4 text-white-50">
+              <div className="row g-4 text-white">
                 <div className="col-sm-4">
                   <div className="d-flex align-items-center">
                     <i className="bi bi-star-fill text-warning me-2 fs-5"></i>
@@ -268,39 +268,39 @@ export default function LandingPage() {
                 <img src={LOGO_PATH} alt="SwiftCV Logo" className="me-2" style={{height: "32px", width: "32px"}} />
                 <span className="fw-bold fs-5">SwiftCV Builder</span>
               </div>
-              <p className="text-white-50 mb-3">
+              <p className="text-white mb-3">
                 Create professional resumes with ease. Beautiful templates, live preview, and instant PDF export.
               </p>
               <div className="d-flex gap-3">
-                <a href="#" className="text-white-50 fs-5"><i className="bi bi-twitter"></i></a>
-                <a href="#" className="text-white-50 fs-5"><i className="bi bi-linkedin"></i></a>
-                <a href="#" className="text-white-50 fs-5"><i className="bi bi-github"></i></a>
+                <a href="#" className="text-white fs-5"><i className="bi bi-twitter"></i></a>
+                <a href="#" className="text-white fs-5"><i className="bi bi-linkedin"></i></a>
+                <a href="#" className="text-white fs-5"><i className="bi bi-github"></i></a>
               </div>
             </div>
 
             <div className="col-lg-2 col-md-3">
               <h6 className="fw-bold mb-3">Product</h6>
               <ul className="list-unstyled">
-                <li><a href="#" className="text-white-50 text-decoration-none">Templates</a></li>
-                <li><a href="#" className="text-white-50 text-decoration-none">Features</a></li>
-                <li><a href="#" className="text-white-50 text-decoration-none">Pricing</a></li>
-                <li><a href="#" className="text-white-50 text-decoration-none">API</a></li>
+                <li><a href="#" className="text-white text-decoration-none">Templates</a></li>
+                <li><a href="#" className="text-white text-decoration-none">Features</a></li>
+                <li><a href="#" className="text-white text-decoration-none">Pricing</a></li>
+                <li><a href="#" className="text-white text-decoration-none">API</a></li>
               </ul>
             </div>
 
             <div className="col-lg-2 col-md-3">
               <h6 className="fw-bold mb-3">Support</h6>
               <ul className="list-unstyled">
-                <li><a href="#" className="text-white-50 text-decoration-none">Help Center</a></li>
-                <li><a href="#" className="text-white-50 text-decoration-none">Contact Us</a></li>
-                <li><a href="#" className="text-white-50 text-decoration-none">Privacy Policy</a></li>
-                <li><a href="#" className="text-white-50 text-decoration-none">Terms of Service</a></li>
+                <li><a href="#" className="text-white text-decoration-none">Help Center</a></li>
+                <li><a href="#" className="text-white text-decoration-none">Contact Us</a></li>
+                <li><a href="#" className="text-white text-decoration-none">Privacy Policy</a></li>
+                <li><a href="#" className="text-white text-decoration-none">Terms of Service</a></li>
               </ul>
             </div>
 
             <div className="col-lg-4">
               <h6 className="fw-bold mb-3">Stay Updated</h6>
-              <p className="text-white-50 small mb-3">
+              <p className="text-white small mb-3">
                 Get the latest updates on new templates and features.
               </p>
               <div className="input-group">
@@ -314,12 +314,12 @@ export default function LandingPage() {
 
           <div className="row align-items-center">
             <div className="col-md-6">
-              <p className="text-white-50 small mb-0">
+              <p className="text-white small mb-0">
                 © {new Date().getFullYear()} SwiftCV Builder. All rights reserved.
               </p>
             </div>
             <div className="col-md-6 text-md-end">
-              <p className="text-white-50 small mb-0">
+              <p className="text-white small mb-0">
                 Made with <i className="bi bi-heart-fill text-danger mx-1"></i> for your career success
               </p>
             </div>

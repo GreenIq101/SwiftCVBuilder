@@ -5,11 +5,11 @@ export default function TemplateCompact({ data = {} }) {
     .filter(Boolean)
 
   return (
-    <div className="text-sm leading-6 text-zinc-800 dark:text-zinc-100 bg-white dark:bg-zinc-900 rounded-md p-5 md:p-8 shadow-sm w-full max-w-3xl mx-auto">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+    <div className="small text-dark bg-white rounded p-4 p-md-5 shadow-sm mx-auto" style={{maxWidth: "48rem", lineHeight: "1.5"}}>
+      <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
         <div>
-          <div className="text-xl font-semibold break-words">{data.name || "Your Name"}</div>
-          <div className="text-zinc-600 dark:text-zinc-400 break-words">
+          <div className="h5 fw-semibold mb-1">{data.name || "Your Name"}</div>
+          <div className="text-muted small">
             {data.email || "Email"} {data.phone ? " • " : ""} {data.phone || ""}
           </div>
         </div>
@@ -17,38 +17,41 @@ export default function TemplateCompact({ data = {} }) {
           <img
             src={data.photo || "/placeholder.svg?height=56&width=56&query=profile%20photo"}
             alt="Profile"
-            className="h-14 w-14 rounded-md object-cover border"
+            className="rounded object-cover border"
+            style={{width: "56px", height: "56px"}}
           />
         ) : null}
       </div>
 
-      {data.summary ? <p className="mt-2 break-words">{data.summary}</p> : null}
+      {data.summary ? <p className="mt-2 mb-0">{data.summary}</p> : null}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-        <section className="md:col-span-2">
-          <h2 className="font-semibold">Experience</h2>
-          <div className="space-y-2">
+      <div className="row g-4 mt-3">
+        <section className="col-md-8">
+          <h2 className="h6 fw-semibold mb-3">Experience</h2>
+          <div className="row g-2">
             {(data.experiences || []).map((x, i) => (
-              <div key={i}>
-                <div className="font-medium">{x.title || "Job Title"}</div>
-                <div className="text-zinc-600 dark:text-zinc-400">
+              <div key={i} className="col-12">
+                <div className="fw-medium">{x.title || "Job Title"}</div>
+                <div className="text-muted small">
                   {x.company || "Company"} {x.duration ? " • " : ""} {x.duration}
                 </div>
-                {x.description ? <p className="mt-1 break-words">{x.description}</p> : null}
+                {x.description ? <p className="mt-1 mb-0">{x.description}</p> : null}
               </div>
             ))}
           </div>
         </section>
-        <aside className="space-y-3">
-          <section>
-            <h3 className="font-semibold">Education</h3>
-            <div className="space-y-1">
+        <aside className="col-md-4">
+          <section className="mb-3">
+            <h3 className="h6 fw-semibold mb-3">Education</h3>
+            <div className="row g-1">
               {(data.education || []).map((e, i) => (
-                <div key={i}>
-                  <div className="font-medium">{e.level || "Title"}</div>
-                  <div className="text-zinc-600 dark:text-zinc-400">
-                    {e.organization || "Institution"} {e.startDate || e.endDate ? " • " : ""}
-                    {[e.startDate, e.endDate].filter(Boolean).join(" - ")}
+                <div key={i} className="col-12">
+                  <div className="small">
+                    <div className="fw-medium">{e.level || "Title"}</div>
+                    <div className="text-muted">
+                      {e.organization || "Institution"} {e.startDate || e.endDate ? " • " : ""}
+                      {[e.startDate, e.endDate].filter(Boolean).join(" - ")}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -56,10 +59,10 @@ export default function TemplateCompact({ data = {} }) {
           </section>
           {skills.length ? (
             <section>
-              <h3 className="font-semibold">Skills</h3>
-              <div className="flex flex-wrap gap-2">
+              <h3 className="h6 fw-semibold mb-3">Skills</h3>
+              <div className="d-flex flex-wrap gap-2">
                 {skills.map((s) => (
-                  <span key={s} className="bg-zinc-100 dark:bg-zinc-800 rounded px-2 py-0.5 border">
+                  <span key={s} className="badge bg-light text-dark small">
                     {s}
                   </span>
                 ))}
