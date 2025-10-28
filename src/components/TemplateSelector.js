@@ -11,7 +11,7 @@ import {
   LayoutPanelLeft,
   History,
   Italic,
-  BadgeIcon as IdCard,
+  IdCard,
   Columns3,
   Image,
 } from "lucide-react"
@@ -47,17 +47,19 @@ export default function TemplateSelector({ template = "classic", setTemplate = (
             const Icon = activeItem?.icon || Palette
             return (
               <>
-                <div className={`rounded-2 d-flex align-items-center justify-content-center ${activeItem?.bgClass} text-white`}
-                     style={{width: "16px", height: "16px"}}>
-                  <Icon style={{width: "12px", height: "12px"}} />
+                <div
+                  className={`rounded-2 d-flex align-items-center justify-content-center ${activeItem?.bgClass} text-white`}
+                  style={{ width: "16px", height: "16px" }}
+                >
+                  <Icon style={{ width: "12px", height: "12px" }} />
                 </div>
                 <span className="fw-medium small d-none d-sm-inline">{activeItem?.name}</span>
                 <svg
-                  className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                  className={`transition-transform ${isExpanded ? "rotate-180" : ""}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  style={{width: "16px", height: "16px"}}
+                  style={{ width: "16px", height: "16px" }}
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -69,8 +71,15 @@ export default function TemplateSelector({ template = "classic", setTemplate = (
 
       {/* Expanded view - shows all templates */}
       {isExpanded && (
-        <div className="position-absolute top-100 start-0 mt-2 bg-white bg-opacity-95 border rounded-4 shadow-lg p-4 animate-fade-in-up"
-             style={{width: "320px", zIndex: 1050}}>
+        <div
+          className="position-absolute top-100 start-0 mt-2 bg-white bg-opacity-95 border rounded-4 shadow-lg p-4 animate-fade-in-up"
+          style={{
+            width: "320px",
+            zIndex: 1050,
+            maxHeight: "60vh", // ✅ Limit modal height
+            overflowY: "auto", // ✅ Make it scrollable
+          }}
+        >
           <div className="row g-3">
             {items.map((it, index) => {
               const Icon = it.icon
@@ -83,23 +92,27 @@ export default function TemplateSelector({ template = "classic", setTemplate = (
                       setTemplate(it.id)
                       setIsExpanded(false)
                     }}
-                    className={`card card-modern h-100 border-0 shadow-sm transition-all animate-fade-in ${active ? 'border-primary bg-primary bg-opacity-5' : 'hover-shadow'}`}
-                    style={{animationDelay: `${index * 50}ms`}}
+                    className={`card card-modern h-100 border-0 shadow-sm transition-all animate-fade-in ${
+                      active ? "border-primary bg-primary bg-opacity-5" : "hover-shadow"
+                    }`}
+                    style={{ animationDelay: `${index * 50}ms` }}
                     aria-pressed={active}
                     aria-label={`Select ${it.name} template`}
                     title={it.name}
                   >
                     <div className="card-body p-3 text-center">
-                      <div className={`rounded-3 d-flex align-items-center justify-content-center mx-auto mb-2 ${it.bgClass} text-white`}
-                           style={{width: "40px", height: "40px"}}>
-                        <Icon style={{width: "20px", height: "20px"}} />
+                      <div
+                        className={`rounded-3 d-flex align-items-center justify-content-center mx-auto mb-2 ${it.bgClass} text-white`}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <Icon style={{ width: "20px", height: "20px" }} />
                       </div>
-                      <h6 className={`card-title mb-1 small fw-bold ${active ? 'text-primary' : ''}`}>
+                      <h6 className={`card-title mb-1 small fw-bold ${active ? "text-primary" : ""}`}>
                         {it.name}
                       </h6>
                       {active && (
                         <div className="d-flex align-items-center justify-content-center gap-1">
-                          <div className="bg-primary rounded-circle animate-pulse" style={{width: "8px", height: "8px"}}></div>
+                          <div className="bg-primary rounded-circle animate-pulse" style={{ width: "8px", height: "8px" }}></div>
                           <small className="text-primary fw-medium">Active</small>
                         </div>
                       )}
@@ -111,9 +124,7 @@ export default function TemplateSelector({ template = "classic", setTemplate = (
           </div>
 
           <div className="mt-3 pt-3 border-top">
-            <p className="text-muted small text-center mb-0">
-              Choose a template to preview your resume
-            </p>
+            <p className="text-muted small text-center mb-0">Choose a template to preview your resume</p>
           </div>
         </div>
       )}
@@ -122,7 +133,7 @@ export default function TemplateSelector({ template = "classic", setTemplate = (
       {isExpanded && (
         <div
           className="position-fixed top-0 start-0 w-100 h-100"
-          style={{zIndex: 1040, backgroundColor: "rgba(0,0,0,0.1)"}}
+          style={{ zIndex: 1040, backgroundColor: "rgba(0,0,0,0.1)" }}
           onClick={() => setIsExpanded(false)}
         />
       )}

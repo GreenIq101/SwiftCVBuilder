@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Plus, Trash2, ArrowUp, ArrowDown, ImagePlus, CheckCircle, AlertCircle } from "lucide-react"
+import { Plus, Trash2, ArrowUp, ArrowDown, ImagePlus, CheckCircle, AlertCircle, X } from "lucide-react"
 
 export default function CVForm({ formData = {}, setFormData = () => {}, section = "profile" }) {
   const [emailTouched, setEmailTouched] = useState(false)
@@ -64,19 +64,21 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                   src={formData.photo || "/placeholder.svg?height=64&width=64&query=profile%20photo"}
                   alt="Profile"
                   className="rounded-3 object-cover border shadow-sm"
-                  style={{width: "80px", height: "80px"}}
+                  style={{ width: "80px", height: "80px" }}
                 />
                 <button
                   onClick={() => updateField("photo", "")}
                   className="btn btn-sm btn-danger position-absolute top-0 end-0 rounded-circle p-1"
-                  style={{width: "24px", height: "24px", fontSize: "12px"}}
+                  style={{ width: "24px", height: "24px", fontSize: "12px" }}
                 >
                   <Trash2 className="h-3 w-3" />
                 </button>
               </div>
             ) : (
-              <div className="d-flex align-items-center justify-content-center bg-light bg-opacity-50 border border-dashed rounded-3 text-muted"
-                   style={{width: "80px", height: "80px"}}>
+              <div
+                className="d-flex align-items-center justify-content-center bg-light bg-opacity-50 border border-dashed rounded-3 text-muted"
+                style={{ width: "80px", height: "80px" }}
+              >
                 <ImagePlus className="h-6 w-6" />
               </div>
             )}
@@ -99,11 +101,11 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
             <div className="mb-3">
               <label className="form-label d-flex align-items-center gap-2 fw-semibold">
                 Full Name
-                {hasValidName && <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />}
+                {hasValidName && <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />}
               </label>
               <input
                 type="text"
-                className={`form-control ${hasValidName ? 'is-valid' : ''}`}
+                className={`form-control ${hasValidName ? "is-valid" : ""}`}
                 placeholder="Your full name"
                 value={formData.name || ""}
                 onChange={(e) => updateField("name", e.target.value)}
@@ -115,12 +117,14 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
             <div className="mb-3">
               <label className="form-label d-flex align-items-center gap-2 fw-semibold">
                 Email Address
-                {hasValidEmail && <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />}
-                {emailTouched && !hasValidEmail && <AlertCircle className="text-danger" style={{width: "16px", height: "16px"}} />}
+                {hasValidEmail && <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />}
+                {emailTouched && !hasValidEmail && (
+                  <AlertCircle className="text-danger" style={{ width: "16px", height: "16px" }} />
+                )}
               </label>
               <input
                 type="email"
-                className={`form-control ${emailTouched && !hasValidEmail ? 'is-invalid' : hasValidEmail ? 'is-valid' : ''}`}
+                className={`form-control ${emailTouched && !hasValidEmail ? "is-invalid" : hasValidEmail ? "is-valid" : ""}`}
                 placeholder="you@example.com"
                 value={formData.email || ""}
                 onChange={(e) => updateField("email", e.target.value)}
@@ -130,7 +134,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
               />
               {emailError && (
                 <div id="email-error" className="invalid-feedback d-flex align-items-center gap-1">
-                  <AlertCircle style={{width: "12px", height: "12px"}} />
+                  <AlertCircle style={{ width: "12px", height: "12px" }} />
                   {emailError}
                 </div>
               )}
@@ -141,11 +145,11 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
             <div className="mb-3">
               <label className="form-label d-flex align-items-center gap-2 fw-semibold">
                 Phone Number
-                {hasValidPhone && <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />}
+                {hasValidPhone && <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />}
               </label>
               <input
                 type="tel"
-                className={`form-control ${hasValidPhone ? 'is-valid' : ''}`}
+                className={`form-control ${hasValidPhone ? "is-valid" : ""}`}
                 placeholder="+1 555 000 0000"
                 value={formData.phone || ""}
                 onChange={(e) => updateField("phone", e.target.value)}
@@ -157,9 +161,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
             <div className="mb-3">
               <label className="form-label d-flex align-items-center gap-2 fw-semibold">
                 Professional Summary
-                <small className="text-muted">
-                  ({(formData.summary || "").length}/500 characters)
-                </small>
+                <small className="text-muted">({(formData.summary || "").length}/500 characters)</small>
               </label>
               <textarea
                 className="form-control"
@@ -180,8 +182,8 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
               {[hasValidName, hasValidEmail, hasValidPhone].map((valid, i) => (
                 <div
                   key={i}
-                  className={`rounded-circle ${valid ? 'bg-success' : 'bg-secondary'}`}
-                  style={{width: "8px", height: "8px"}}
+                  className={`rounded-circle ${valid ? "bg-success" : "bg-secondary"}`}
+                  style={{ width: "8px", height: "8px" }}
                 />
               ))}
             </div>
@@ -199,24 +201,30 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
     return (
       <div className="animate-fade-in">
         {list.map((edu, i) => (
-          <div key={i} className="card card-modern mb-3 shadow-sm animate-slide-in-left" style={{animationDelay: `${i * 50}ms`}}>
+          <div
+            key={i}
+            className="card card-modern mb-3 shadow-sm animate-slide-in-left"
+            style={{ animationDelay: `${i * 50}ms` }}
+          >
             {/* Header with index and actions */}
             <div className="card-header bg-white border-0 d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center gap-2">
-                <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                     style={{width: "24px", height: "24px", fontSize: "12px"}}>
+                <div
+                  className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                  style={{ width: "24px", height: "24px", fontSize: "12px" }}
+                >
                   {i + 1}
                 </div>
                 <small className="text-muted fw-medium">Education Entry</small>
               </div>
-              <div className="d-flex gap-1 opacity-0 hover-opacity-100 transition-opacity">
+              <div className="d-flex gap-1">
                 <button
                   className="btn btn-sm btn-outline-secondary"
                   onClick={() => moveListItem("education", i, i - 1)}
                   disabled={i === 0}
                   aria-label="Move up"
                 >
-                  <ArrowUp style={{width: "12px", height: "12px"}} />
+                  <ArrowUp style={{ width: "12px", height: "12px" }} />
                 </button>
                 <button
                   className="btn btn-sm btn-outline-secondary"
@@ -224,14 +232,14 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                   disabled={i === list.length - 1}
                   aria-label="Move down"
                 >
-                  <ArrowDown style={{width: "12px", height: "12px"}} />
+                  <ArrowDown style={{ width: "12px", height: "12px" }} />
                 </button>
                 <button
                   className="btn btn-sm btn-outline-danger"
                   onClick={() => removeListItem("education", i)}
-                  aria-label="Delete"
+                  aria-label="Delete education entry"
                 >
-                  <Trash2 style={{width: "12px", height: "12px"}} />
+                  <Trash2 style={{ width: "12px", height: "12px" }} />
                 </button>
               </div>
             </div>
@@ -284,7 +292,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
               {/* Completion indicator */}
               {edu.level && edu.organization && (edu.startDate || edu.endDate) && (
                 <div className="d-flex align-items-center gap-2 mt-3 pt-3 border-top border-light">
-                  <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />
+                  <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />
                   <small className="text-success fw-medium">Entry complete</small>
                 </div>
               )}
@@ -296,15 +304,17 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
           className="btn btn-outline-primary w-100 border-dashed py-3 mb-3"
           onClick={() => addListItem("education", { level: "", organization: "", startDate: "", endDate: "" })}
         >
-          <Plus className="me-2" style={{width: "16px", height: "16px"}} />
+          <Plus className="me-2" style={{ width: "16px", height: "16px" }} />
           Add Education
         </button>
 
         {list.length === 0 && (
           <div className="text-center py-5 text-muted">
-            <div className="bg-light bg-opacity-50 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                 style={{width: "48px", height: "48px"}}>
-              <Plus style={{width: "24px", height: "24px"}} />
+            <div
+              className="bg-light bg-opacity-50 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style={{ width: "48px", height: "48px" }}
+            >
+              <Plus style={{ width: "24px", height: "24px" }} />
             </div>
             <p className="mb-1">No education entries yet</p>
             <small>Click "Add Education" to get started</small>
@@ -321,25 +331,31 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
         {list.map((exp, i) => {
           const isComplete = exp.title && exp.company && exp.duration
           return (
-            <div key={i} className="card card-modern mb-3 shadow-sm animate-slide-in-left" style={{animationDelay: `${i * 50}ms`}}>
+            <div
+              key={i}
+              className="card card-modern mb-3 shadow-sm animate-slide-in-left"
+              style={{ animationDelay: `${i * 50}ms` }}
+            >
               {/* Header with index and actions */}
               <div className="card-header bg-white border-0 d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center gap-2">
-                  <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                       style={{width: "24px", height: "24px", fontSize: "12px"}}>
+                  <div
+                    className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                    style={{ width: "24px", height: "24px", fontSize: "12px" }}
+                  >
                     {i + 1}
                   </div>
                   <small className="text-muted fw-medium">Work Experience</small>
-                  {isComplete && <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />}
+                  {isComplete && <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />}
                 </div>
-                <div className="d-flex gap-1 opacity-0 hover-opacity-100 transition-opacity">
+                <div className="d-flex gap-1">
                   <button
                     className="btn btn-sm btn-outline-secondary"
                     onClick={() => moveListItem("experiences", i, i - 1)}
                     disabled={i === 0}
                     aria-label="Move up"
                   >
-                    <ArrowUp style={{width: "12px", height: "12px"}} />
+                    <ArrowUp style={{ width: "12px", height: "12px" }} />
                   </button>
                   <button
                     className="btn btn-sm btn-outline-secondary"
@@ -347,14 +363,14 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                     disabled={i === list.length - 1}
                     aria-label="Move down"
                   >
-                    <ArrowDown style={{width: "12px", height: "12px"}} />
+                    <ArrowDown style={{ width: "12px", height: "12px" }} />
                   </button>
                   <button
                     className="btn btn-sm btn-outline-danger"
                     onClick={() => removeListItem("experiences", i)}
-                    aria-label="Delete"
+                    aria-label="Delete work experience"
                   >
-                    <Trash2 style={{width: "12px", height: "12px"}} />
+                    <Trash2 style={{ width: "12px", height: "12px" }} />
                   </button>
                 </div>
               </div>
@@ -395,9 +411,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                   <div className="col-12">
                     <label className="form-label fw-semibold small d-flex align-items-center gap-2">
                       Description
-                      <small className="text-muted">
-                        ({(exp.description || "").length}/1000 characters)
-                      </small>
+                      <small className="text-muted">({(exp.description || "").length}/1000 characters)</small>
                     </label>
                     <textarea
                       className="form-control"
@@ -413,7 +427,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                 {/* Completion indicator */}
                 {isComplete && (
                   <div className="d-flex align-items-center gap-2 mt-3 pt-3 border-top border-light">
-                    <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />
+                    <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />
                     <small className="text-success fw-medium">Entry complete</small>
                   </div>
                 )}
@@ -426,15 +440,17 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
           className="btn btn-outline-primary w-100 border-dashed py-3 mb-3"
           onClick={() => addListItem("experiences", { title: "", company: "", duration: "", description: "" })}
         >
-          <Plus className="me-2" style={{width: "16px", height: "16px"}} />
+          <Plus className="me-2" style={{ width: "16px", height: "16px" }} />
           Add Work Experience
         </button>
 
         {list.length === 0 && (
           <div className="text-center py-5 text-muted">
-            <div className="bg-light bg-opacity-50 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                 style={{width: "48px", height: "48px"}}>
-              <Plus style={{width: "24px", height: "24px"}} />
+            <div
+              className="bg-light bg-opacity-50 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style={{ width: "48px", height: "48px" }}
+            >
+              <Plus style={{ width: "24px", height: "24px" }} />
             </div>
             <p className="mb-1">No work experience entries yet</p>
             <small>Click "Add Work Experience" to get started</small>
@@ -451,25 +467,31 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
         {list.map((proj, i) => {
           const isComplete = proj.name && proj.description
           return (
-            <div key={i} className="card card-modern mb-3 shadow-sm animate-slide-in-right" style={{animationDelay: `${i * 50}ms`}}>
+            <div
+              key={i}
+              className="card card-modern mb-3 shadow-sm animate-slide-in-right"
+              style={{ animationDelay: `${i * 50}ms` }}
+            >
               {/* Header with index and actions */}
               <div className="card-header bg-white border-0 d-flex justify-content-between align-items-center">
                 <div className="d-flex align-items-center gap-2">
-                  <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                       style={{width: "24px", height: "24px", fontSize: "12px"}}>
+                  <div
+                    className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                    style={{ width: "24px", height: "24px", fontSize: "12px" }}
+                  >
                     {i + 1}
                   </div>
                   <small className="text-muted fw-medium">Project</small>
-                  {isComplete && <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />}
+                  {isComplete && <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />}
                 </div>
-                <div className="d-flex gap-1 opacity-0 hover-opacity-100 transition-opacity">
+                <div className="d-flex gap-1">
                   <button
                     className="btn btn-sm btn-outline-secondary"
                     onClick={() => moveListItem("projects", i, i - 1)}
                     disabled={i === 0}
                     aria-label="Move up"
                   >
-                    <ArrowUp style={{width: "12px", height: "12px"}} />
+                    <ArrowUp style={{ width: "12px", height: "12px" }} />
                   </button>
                   <button
                     className="btn btn-sm btn-outline-secondary"
@@ -477,14 +499,14 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                     disabled={i === list.length - 1}
                     aria-label="Move down"
                   >
-                    <ArrowDown style={{width: "12px", height: "12px"}} />
+                    <ArrowDown style={{ width: "12px", height: "12px" }} />
                   </button>
                   <button
                     className="btn btn-sm btn-outline-danger"
                     onClick={() => removeListItem("projects", i)}
-                    aria-label="Delete"
+                    aria-label="Delete project"
                   >
-                    <Trash2 style={{width: "12px", height: "12px"}} />
+                    <Trash2 style={{ width: "12px", height: "12px" }} />
                   </button>
                 </div>
               </div>
@@ -515,9 +537,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                   <div className="col-12">
                     <label className="form-label fw-semibold small d-flex align-items-center gap-2">
                       Description
-                      <small className="text-muted">
-                        ({(proj.description || "").length}/800 characters)
-                      </small>
+                      <small className="text-muted">({(proj.description || "").length}/800 characters)</small>
                     </label>
                     <textarea
                       className="form-control"
@@ -533,7 +553,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
                 {/* Completion indicator */}
                 {isComplete && (
                   <div className="d-flex align-items-center gap-2 mt-3 pt-3 border-top border-light">
-                    <CheckCircle className="text-success" style={{width: "16px", height: "16px"}} />
+                    <CheckCircle className="text-success" style={{ width: "16px", height: "16px" }} />
                     <small className="text-success fw-medium">Entry complete</small>
                   </div>
                 )}
@@ -546,15 +566,17 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
           className="btn btn-outline-primary w-100 border-dashed py-3 mb-3"
           onClick={() => addListItem("projects", { name: "", description: "", link: "" })}
         >
-          <Plus className="me-2" style={{width: "16px", height: "16px"}} />
+          <Plus className="me-2" style={{ width: "16px", height: "16px" }} />
           Add Project
         </button>
 
         {list.length === 0 && (
           <div className="text-center py-5 text-muted">
-            <div className="bg-light bg-opacity-50 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                 style={{width: "48px", height: "48px"}}>
-              <Plus style={{width: "24px", height: "24px"}} />
+            <div
+              className="bg-light bg-opacity-50 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style={{ width: "48px", height: "48px" }}
+            >
+              <Plus style={{ width: "24px", height: "24px" }} />
             </div>
             <p className="mb-1">No projects added yet</p>
             <small>Click "Add Project" to showcase your work</small>
@@ -565,7 +587,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
   }
 
   if (section === "skills") {
-    const skillsCount = (formData.skills || "").split(",").filter(s => s.trim()).length
+    const skillsCount = (formData.skills || "").split(",").filter((s) => s.trim()).length
     return (
       <div className="animate-fade-in">
         <div className="d-flex justify-content-between align-items-start mb-4">
@@ -575,8 +597,8 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
           </div>
           {skillsCount > 0 && (
             <div className="badge bg-primary bg-opacity-10 text-primary d-flex align-items-center gap-1 px-3 py-2">
-              <CheckCircle style={{width: "14px", height: "14px"}} />
-              {skillsCount} skill{skillsCount !== 1 ? 's' : ''}
+              <CheckCircle style={{ width: "14px", height: "14px" }} />
+              {skillsCount} skill{skillsCount !== 1 ? "s" : ""}
             </div>
           )}
         </div>
@@ -586,15 +608,36 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
             value={formData.skills || ""}
             onChange={(val) => updateField("skills", val)}
             placeholder="e.g., JavaScript, React, Node.js, Python..."
+            onRemoveTag={(tag) => {
+              const tokens = (formData.skills || "")
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean)
+              const updated = tokens.filter((t) => t !== tag).join(", ")
+              updateField("skills", updated)
+            }}
           />
         </div>
 
         <div className="bg-light bg-opacity-50 rounded-3 p-4 border border-dashed">
           <div className="d-flex gap-3">
-            <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                 style={{width: "20px", height: "20px"}}>
-              <svg className="text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{width: "12px", height: "12px"}}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div
+              className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+              style={{ width: "20px", height: "20px" }}
+            >
+              <svg
+                className="text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                style={{ width: "12px", height: "12px" }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
             <div>
@@ -613,7 +656,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
   }
 
   if (section === "hobbies") {
-    const hobbiesCount = (formData.hobbies || "").split(",").filter(s => s.trim()).length
+    const hobbiesCount = (formData.hobbies || "").split(",").filter((s) => s.trim()).length
     return (
       <div className="animate-fade-in">
         <div className="d-flex justify-content-between align-items-start mb-4">
@@ -623,8 +666,8 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
           </div>
           {hobbiesCount > 0 && (
             <div className="badge bg-primary bg-opacity-10 text-primary d-flex align-items-center gap-1 px-3 py-2">
-              <CheckCircle style={{width: "14px", height: "14px"}} />
-              {hobbiesCount} interest{hobbiesCount !== 1 ? 's' : ''}
+              <CheckCircle style={{ width: "14px", height: "14px" }} />
+              {hobbiesCount} interest{hobbiesCount !== 1 ? "s" : ""}
             </div>
           )}
         </div>
@@ -634,15 +677,36 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
             value={formData.hobbies || ""}
             onChange={(val) => updateField("hobbies", val)}
             placeholder="e.g., Reading, Photography, Hiking, Cooking..."
+            onRemoveTag={(tag) => {
+              const tokens = (formData.hobbies || "")
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean)
+              const updated = tokens.filter((t) => t !== tag).join(", ")
+              updateField("hobbies", updated)
+            }}
           />
         </div>
 
         <div className="bg-light bg-opacity-50 rounded-3 p-4 border border-dashed">
           <div className="d-flex gap-3">
-            <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                 style={{width: "20px", height: "20px"}}>
-              <svg className="text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{width: "12px", height: "12px"}}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <div
+              className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+              style={{ width: "20px", height: "20px" }}
+            >
+              <svg
+                className="text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                style={{ width: "12px", height: "12px" }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
               </svg>
             </div>
             <div>
@@ -663,7 +727,7 @@ export default function CVForm({ formData = {}, setFormData = () => {}, section 
   return null
 }
 
-function TagInput({ value = "", onChange = () => {}, placeholder = "Add item" }) {
+function TagInput({ value = "", onChange = () => {}, placeholder = "Add item", onRemoveTag = () => {} }) {
   const tokens = useMemo(
     () =>
       (value || "")
@@ -682,7 +746,10 @@ function TagInput({ value = "", onChange = () => {}, placeholder = "Add item" })
     onChange(Array.from(set).join(", "))
     setDraft("")
   }
-  const removeToken = (tok) => onChange(tokens.filter((t) => t !== tok).join(", "))
+  const removeToken = (tok) => {
+    onRemoveTag(tok)
+    onChange(tokens.filter((t) => t !== tok).join(", "))
+  }
   const onKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault()
@@ -699,10 +766,11 @@ function TagInput({ value = "", onChange = () => {}, placeholder = "Add item" })
           key={t}
           type="button"
           onClick={() => removeToken(t)}
-          className="btn btn-sm btn-secondary rounded-pill px-3 py-1"
+          className="btn btn-sm btn-secondary rounded-pill px-3 py-1 d-flex align-items-center gap-1"
           aria-label={`Remove ${t}`}
         >
           {t}
+          <X style={{ width: "14px", height: "14px" }} />
         </button>
       ))}
       <input
@@ -711,7 +779,7 @@ function TagInput({ value = "", onChange = () => {}, placeholder = "Add item" })
         onKeyDown={onKeyDown}
         placeholder={placeholder}
         className="form-control form-control-sm border-0 bg-transparent flex-grow-1"
-        style={{minWidth: "120px"}}
+        style={{ minWidth: "120px" }}
       />
     </div>
   )

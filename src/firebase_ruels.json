@@ -1,43 +1,39 @@
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-
-    // Resumes: Only owner can read/write
-    match /resumes/{resumeId} {
-      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
-
-      allow create: if request.auth != null &&
-        request.resource.data.userId == request.auth.uid &&
-        request.resource.data.keys().hasAll(['userId', 'name', 'data', 'template', 'updatedAt']) &&
-        request.resource.data.name is string &&
-        request.resource.data.template is string &&
-        request.resource.data.updatedAt is timestamp;
-
-      allow update: if request.auth != null &&
-        resource.data.userId == request.auth.uid &&
-        request.resource.data.keys().hasAll(['userId', 'name', 'data', 'template', 'updatedAt']) &&
-        request.resource.data.name is string &&
-        request.resource.data.template is string &&
-        request.resource.data.updatedAt is timestamp;
-
-      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
-    }
-
-    // User settings: Only owner can read/write
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // Saved templates (if you store user-customized templates)
-    match /templates/{templateId} {
-      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
-    }
-
-    // Deny everything else
-    match /{document=**} {
-      allow read, write: if false;
+{
+  "rules_version": "2",
+  "rules": {
+    "databases": {
+      "{database}": {
+        "documents": {
+          "resumes": {
+            "{resumeId}": {
+              ".read": "request.auth != null && resource.data.userId == request.auth.uid",
+              ".write": "request.auth != null && resource.data.userId == request.auth.uid",
+              ".create": "request.auth != null && request.resource.data.userId == request.auth.uid && request.resource.data.keys().hasAll(['userId', 'name', 'data', 'template', 'updatedAt']) && request.resource.data.name is string && request.resource.data.template is string && request.resource.data.updatedAt is timestamp",
+              ".update": "request.auth != null && resource.data.userId == request.auth.uid && request.resource.data.keys().hasAll(['userId', 'name', 'data', 'template', 'updatedAt']) && request.resource.data.name is string && request.resource.data.template is string && request.resource.data.updatedAt is timestamp",
+              ".delete": "request.auth != null && resource.data.userId == request.auth.uid"
+            }
+          },
+          "users": {
+            "{userId}": {
+              ".read": "request.auth != null && request.auth.uid == {userId}",
+              ".write": "request.auth != null && request.auth.uid == {userId}"
+            }
+          },
+          "templates": {
+            "{templateId}": {
+              ".read": "request.auth != null && resource.data.userId == request.auth.uid",
+              ".write": "request.auth != null && resource.data.userId == request.auth.uid",
+              ".create": "request.auth != null && request.resource.data.userId == request.auth.uid",
+              ".update": "request.auth != null && resource.data.userId == request.auth.uid",
+              ".delete": "request.auth != null && resource.data.userId == request.auth.uid"
+            }
+          },
+          "{document=**}": {
+            ".read": false,
+            ".write": false
+          }
+        }
+      }
     }
   }
 }
