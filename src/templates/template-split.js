@@ -65,7 +65,7 @@ export default function TemplateSplit({ data = {} }) {
             />
           )}
           <div>
-            <h1 className="h5 fw-semibold mb-1">
+            <h1 className="h5 fw-semibold mb-1 text-small">
               {data.name || "Your Name"}
             </h1>
             <p className="text-muted small mb-0">
